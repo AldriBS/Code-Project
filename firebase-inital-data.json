@@ -1,0 +1,98 @@
+{
+  "config": {
+    "thresholds": {
+      "area1": {
+        "normal": {
+          "min": 0,
+          "max": 5,
+          "color": "green",
+          "description": "Normal - Aman"
+        },
+        "warning": {
+          "min": 6,
+          "max": 7,
+          "color": "yellow",
+          "description": "Warning - Perlu Perhatian"
+        },
+        "critical": {
+          "min": 8,
+          "max": 10,
+          "color": "red",
+          "description": "Critical - Bahaya"
+        }
+      },
+      "area2": {
+        "normal": {
+          "min": 0,
+          "max": 5,
+          "color": "green",
+          "description": "Normal - Aman"
+        },
+        "warning": {
+          "min": 6,
+          "max": 7,
+          "color": "yellow",
+          "description": "Warning - Perlu Perhatian"
+        },
+        "critical": {
+          "min": 8,
+          "max": 10,
+          "color": "red",
+          "description": "Critical - Bahaya"
+        }
+      }
+    },
+    "autoPump": {
+      "area1": {
+        "enabled": true,
+        "activateLevel": 6,
+        "deactivateLevel": 3,
+        "description": "Auto-pump untuk Hose Line Water Pit"
+      },
+      "area2": {
+        "enabled": true,
+        "activateLevel": 6,
+        "deactivateLevel": 3,
+        "description": "Auto-pump untuk Trafo Room Water Pit"
+      }
+    },
+    "sensorTimeout": {
+      "seconds": 30,
+      "description": "Sensor dianggal offline jika tidak kirim data dalam waktu ini"
+    }
+  },
+  "alarms": {
+    "area1": {
+      "current": null,
+      "history": []
+    },
+    "area2": {
+      "current": null,
+      "history": []
+    }
+  },
+  "area1": {
+    "waterLevel": 0,
+    "waterHeight": 0,
+    "pumpStatus": false,
+    "pumpCommand": false,
+    "current": 0,
+    "servoPosition": 0,
+    "servoState": "IDLE",
+    "timestamp": "",
+    "lastUpdate": 0,
+    "online": false,
+    "sensorOnline": true
+  },
+  "area2": {
+    "waterLevel": 0,
+    "waterHeight": 0,
+    "pumpStatus": false,
+    "pumpCommand": false,
+    "current": 0,
+    "timestamp": "",
+    "lastUpdate": 0,
+    "online": false,
+    "sensorOnline": true
+  }
+}

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hydraulic Plant Flood Prevention Control System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="index.html" class="logo-link">
+                <img src="komatsu_logo.png" alt="Komatsu Logo" class="header-logo">
+            </a>
+            <h1>Hydraulic Plant Flood Prevention Control System</h1>
+            <div id="userInfo" style="position: absolute; right: 20px; top: 50%; transform: translateY(-50%); display: flex; align-items: center; color: white; font-size: 14px;"></div>
+        </header>
+
+        <div class="main-content">
+            <!-- Denah Plant -->
+            <div class="plant-map">
+                <img src="Denah.png" alt="Plant Layout" id="plantLayout">
+                
+                <!-- Pump Area 1 Overlay -->
+                <div class="pump-overlay pump-area-1" id="pumpArea1" onclick="goToArea(1)">
+                    <div class="pump-info">
+                        <img src="pin.png" alt="Location Pin" class="location-pin">
+                        <h3>Pump Area 1</h3>
+                        <div class="status-indicator">
+                            <img src="waterpump.png" alt="Water Pump" class="pump-icon">
+                            <div class="status-circle" id="status1"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pump Area 2 Overlay -->
+                <div class="pump-overlay pump-area-2" id="pumpArea2" onclick="goToArea(2)">
+                    <div class="pump-info">
+                        <img src="pin.png" alt="Location Pin" class="location-pin">
+                        <h3>Pump Area 2</h3>
+                        <div class="status-indicator">
+                            <img src="waterpump.png" alt="Water Pump" class="pump-icon">
+                            <div class="status-circle" id="status2"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Legend dan Water Level -->
+            <div class="sidebar">
+                <div class="legend">
+                    <h2>Legend</h2>
+                    <div class="legend-status-row">
+                        <div class="legend-item">
+                            <div class="status-circle off"></div>
+                            <span>OFF</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="status-circle on"></div>
+                            <span>ON</span>
+                        </div>
+                    </div>
+                    <div class="legend-item">
+                        <img src="waterpump.png" alt="Pompa Banjir" class="legend-pump">
+                        <span>Pompa Banjir</span>
+                    </div>
+
+                    <!-- ======================================================
+                         WATER LEVEL SCALE INFO
+                         EDIT DISINI untuk mengubah nilai skala:
+                         - Area 1: Ubah "20 cm" dan "200 cm" 
+                         - Area 2: Ubah "5 cm" dan "50 cm"
+                         
+                         Rumus: 1 level = (Tinggi Max / 10 skala)
+                         ====================================================== -->
+                    <div class="legend-scale-info">
+                        <h3>📏 Water Level Scale</h3>
+                        <div class="scale-detail">
+                            <div class="scale-detail-item">
+                                <span class="area-label">Area 1:</span>
+                                <span class="scale-value">1 level = 20 cm</span>
+                            </div>
+                            <div class="scale-detail-item" style="padding-left: 68px; margin-top: -4px;">
+                                <span class="scale-max">(Max: 200 cm / 10 levels)</span>
+                            </div>
+                            <div class="scale-detail-item">
+                                <span class="area-label">Area 2:</span>
+                                <span class="scale-value">1 level = 5 cm</span>
+                            </div>
+                            <div class="scale-detail-item" style="padding-left: 68px; margin-top: -4px;">
+                                <span class="scale-max">(Max: 50 cm / 10 levels)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="water-level-section">
+                    <h2>Water Level</h2>
+                    <div class="water-levels">
+                        <!-- Pump Area 1 -->
+                        <div class="water-level-container">
+                            <div class="level-header">
+                                <img src="pin.png" alt="Pin" class="small-pin">
+                                <h3>Pump Area 1</h3>
+                            </div>
+                            <div class="level-bar">
+                                <div class="level-scale">
+                                    <div class="scale-number">10</div>
+                                    <div class="scale-number">9</div>
+                                    <div class="scale-number">8</div>
+                                    <div class="scale-number">7</div>
+                                    <div class="scale-number">6</div>
+                                    <div class="scale-number">5</div>
+                                    <div class="scale-number">4</div>
+                                    <div class="scale-number">3</div>
+                                    <div class="scale-number">2</div>
+                                    <div class="scale-number">1</div>
+                                    <div class="scale-number">0</div>
+                                </div>
+                                <div class="level-fill" id="levelFill1">
+                                    <div class="level-marks">
+                                        <span class="level-mark"></span>
+                                        <span class="level-mark"></span>
+                                        <span class="level-mark"></span>
+                                        <span class="level-mark"></span>
+                                        <span class="level-mark"></span>
+                                        <span class="level-mark"></span>
+                                        <span class="level-mark"></span>
+                                        <span class="level-mark"></span>
+                                        <span class="level-mark"></span>
+                                        <span class="level-mark"></span>
+                                        <span class="level-mark"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Pump Area 2 -->
+                        <div class="water-level-container">
+                            <div class="level-header">
+                                <img src="pin.png" alt="Pin" class="small-pin">
+                                <h3>Pump Area 2</h3>
+                            </div>
+                            <div class="level-bar">
+                                <div class="level-scale">
+                                    <div class="scale-number">10</div>
+                                    <div class="scale-number">9</div>
+                                    <div class="scale-number">8</div>
+                                    <div class="scale-number">7</div>
+                                    <div class="scale-number">6</div>
+                                    <div class="scale-number">5</div>
+                                    <div class="scale-number">4</div>
+                                    <div class="scale-number">3</div>
+                                    <div class="scale-number">2</div>
+                                    <div class="scale-number">1</div>
+                                    <div class="scale-number">0</div>
+                                </div>
+                                <div class="level-fill" id="levelFill2">
+                                    <div class="level-marks">
+                                        <span class="level-mark"></span>
+                                        <span class="level-mark"></span>
+                                        <span class="level-mark"></span>
+                                        <span class="level-mark"></span>
+                                        <span class="level-mark"></span>
+                                        <span class="level-mark"></span>
+                                        <span class="level-mark"></span>
+                                        <span class="level-mark"></span>
+                                        <span class="level-mark"></span>
+                                        <span class="level-mark"></span>
+                                        <span class="level-mark"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+    
+    <!-- Custom Scripts -->
+    <script src="firebase-config.js"></script>
+    <script src="auth-guard.js"></script>
+    <script src="alarm-system.js"></script>  <!-- NEW: Alarm system -->
+    <script src="script.js"></script>
+</body>
+</html>

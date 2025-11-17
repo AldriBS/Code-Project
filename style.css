@@ -1,0 +1,1859 @@
+/* Reset dan Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #e8eef7 0%, #f5f8fc 100%);
+    min-height: 100vh;
+    padding: 0;               /* Hilangkan padding untuk full width */
+    margin: 0;
+    overflow-x: hidden;       /* Prevent horizontal scroll */
+}
+
+.container {
+    max-width: 100%;          /* ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â Ãƒâ€šÃ‚Â FLUID - menyesuaikan layar */
+    width: 100%;
+    margin: 0 auto;
+    background: white;
+    border-radius: 0;         /* Hilangkan border radius untuk full width */
+    box-shadow: none;         /* Hilangkan shadow untuk cleaner look */
+    overflow: hidden;
+    min-height: 100vh;        /* Full viewport height */
+}
+
+/* Header */
+header {
+    background: linear-gradient(135deg, #003087 0%, #0051a5 50%, #006bb8 100%);
+    color: white;
+    padding: 20px 30px;
+    text-align: center;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    box-shadow: 0 4px 12px rgba(0, 48, 135, 0.3);
+    flex-shrink: 0;           /* Header tidak shrink */
+}
+
+header h1 {
+    font-size: 26px;
+    font-weight: 600;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    flex: 1;
+    margin-left: 100px;
+}
+
+/* Logo Komatsu */
+.logo-link {
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    transition: all 0.3s ease;
+    z-index: 100;
+    background: white;
+    padding: 8px 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.logo-link:hover {
+    transform: translateY(-50%) scale(1.05);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+}
+
+.header-logo {
+    height: 38px;
+    width: auto;
+    display: block;
+    cursor: pointer;
+}
+
+/* Main Content Layout - FLUID */
+.main-content {
+    display: flex;
+    gap: 15px;
+    padding: 15px;
+    min-height: calc(100vh - 80px);    /* Full height minus header */
+    height: calc(100vh - 80px);
+}
+
+/* Plant Map - Scrollable with Zoom Stability */
+.plant-map {
+    flex: 1;
+    position: relative;
+    background: white;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 4px 12px rgba(0, 48, 135, 0.1);
+    border-left: 4px solid #003087;
+    overflow: auto;           /* ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â Ãƒâ€šÃ‚Â SCROLL jika konten lebih besar */
+    max-height: 100%;
+    /* Zoom stability enhancements */
+    min-height: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#plantLayout {
+    width: 100%;
+    height: auto;
+    min-width: 800px;         /* ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â Ãƒâ€šÃ‚Â Minimum size untuk denah */
+    display: block;
+    border-radius: 8px;
+    max-width: 100%;
+    object-fit: contain;
+    /* Ensure consistent rendering at all zoom levels */
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+}
+
+/* Pump Overlay - SCADA Style with VW Units Auto Scaling */
+.pump-overlay {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.95);
+    border: 0.15vw solid #003087;
+    border-radius: 0.6vw;
+    padding: 0.35vw 0.5vw;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 0.2vw 0.5vw rgba(0, 48, 135, 0.2);
+    backdrop-filter: blur(5px);
+    /* Natural scaling dengan viewport */
+    transform-origin: center center;
+    will-change: transform;
+}
+
+.pump-overlay:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0.4vw 1vw rgba(0, 48, 135, 0.4);
+    border-color: #0051a5;
+    background: rgba(255, 255, 255, 1);
+    z-index: 1000;
+}
+
+/* Pump Area Positioning - PERCENTAGE BASED for Zoom Consistency */
+.pump-area-1 {
+    bottom: 20%;
+    left: 1.5%;
+}
+
+.pump-area-2 {
+    top: 2%;
+    right: 53%;
+}
+
+.pump-info {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.4vw;
+    font-size: initial;  /* Reset font-size */
+}
+
+/* Hide h3 by default, show on hover */
+.pump-info h3 {
+    color: #003087;
+    font-size: 0.9vw;
+    font-weight: 700;
+    text-align: center;
+    white-space: nowrap;
+    opacity: 0;
+    max-width: 0;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    margin: 0;
+}
+
+.pump-info .status-indicator {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.4vw;
+}
+
+.pump-info .status-indicator .pump-icon {
+    width: 2.5vw;
+    height: 2.5vw;
+    min-width: 35px;
+    min-height: 35px;
+    opacity: 0;
+    max-width: 0;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    filter: drop-shadow(0 0.15vw 0.3vw rgba(0, 0, 0, 0.2));
+}
+
+/* Show h3 and pump-icon on hover */
+.pump-overlay:hover .pump-info h3 {
+    opacity: 1;
+    max-width: 200px;
+    margin-right: 0.3vw;
+}
+
+.pump-overlay:hover .pump-info .status-indicator .pump-icon {
+    opacity: 1;
+    max-width: 100px;
+}
+
+/* Pin Icon - Always Visible - VW Units for Auto Scaling */
+.pump-overlay .location-pin {
+    width: 1.6vw;
+    height: 1.6vw;
+    min-width: 20px;
+    min-height: 20px;
+    filter: drop-shadow(0 0.1vw 0.2vw rgba(0, 0, 0, 0.2));
+    margin: 0;  /* No margin */
+    display: block;  /* Block display untuk kontrol lebih baik */
+}
+
+/* Status Circle - Professional Design with Effects - Compact Size */
+.status-circle {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    box-shadow: 0 0 0 2px #003087, 0 2px 8px rgba(0, 0, 0, 0.25);
+    transition: all 0.3s;
+    position: relative;
+    background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(0,0,0,0.1) 100%);
+}
+
+/* Status Circle in Overlay - VW Units for Auto Scaling (Smaller) */
+.pump-overlay .status-circle {
+    width: 1.4vw;
+    height: 1.4vw;
+    min-width: 18px;
+    min-height: 18px;
+    border: 0.12vw solid #fff;
+    box-shadow: 0 0 0 0.12vw #003087, 0 0.12vw 0.5vw rgba(0, 0, 0, 0.25);
+    display: block;  /* Block display */
+}
+
+/* Status ON - Green with pulse & ripple */
+.status-circle.on {
+    background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+    box-shadow: 0 0 0 2px #fff, 0 0 0 4px #28a745, 
+                0 0 20px rgba(40, 167, 69, 0.8),
+                inset 0 2px 4px rgba(255, 255, 255, 0.3);
+    animation: statusPulseOn 2s ease-in-out infinite;
+}
+
+/* Status OFF - Red with subtle pulse & glow */
+.status-circle.off {
+    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+    box-shadow: 0 0 0 2px #fff, 0 0 0 4px #dc3545, 
+                0 0 15px rgba(220, 53, 69, 0.6),
+                inset 0 2px 4px rgba(255, 255, 255, 0.2);
+    animation: statusPulseOff 3s ease-in-out infinite;
+}
+
+/* Overlay Status ON - VW Units for Scaling */
+.pump-overlay .status-circle.on {
+    box-shadow: 0 0 0 0.12vw #fff, 0 0 0 0.25vw #28a745, 
+                0 0 1.2vw rgba(40, 167, 69, 0.8),
+                inset 0 0.12vw 0.25vw rgba(255, 255, 255, 0.3);
+}
+
+/* Overlay Status OFF - VW Units for Scaling */
+.pump-overlay .status-circle.off {
+    box-shadow: 0 0 0 0.12vw #fff, 0 0 0 0.25vw #dc3545, 
+                0 0 1vw rgba(220, 53, 69, 0.6),
+                inset 0 0.12vw 0.25vw rgba(255, 255, 255, 0.2);
+}
+
+/* Ripple effect for ON status */
+.status-circle.on::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 2px solid #28a745;
+    transform: translate(-50%, -50%);
+    animation: ripple 2s ease-out infinite;
+}
+
+/* Overlay Ripple - VW Units */
+.pump-overlay .status-circle.on::before {
+    border: 0.12vw solid #28a745;
+}
+
+/* Inner glow for both states */
+.status-circle::after {
+    content: '';
+    position: absolute;
+    top: 20%;
+    left: 20%;
+    width: 40%;
+    height: 40%;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.6);
+    filter: blur(2px);
+}
+
+/* ON State Pulse - Breathing effect */
+@keyframes statusPulseOn {
+    0%, 100% {
+        box-shadow: 0 0 0 2px #fff, 0 0 0 4px #28a745, 
+                    0 0 20px rgba(40, 167, 69, 0.8),
+                    inset 0 2px 4px rgba(255, 255, 255, 0.3);
+        transform: scale(1);
+    }
+    50% {
+        box-shadow: 0 0 0 2px #fff, 0 0 0 4px #28a745, 
+                    0 0 30px rgba(40, 167, 69, 1),
+                    inset 0 2px 4px rgba(255, 255, 255, 0.4);
+        transform: scale(1.05);
+    }
+}
+
+/* OFF State Pulse - Subtle breathing */
+@keyframes statusPulseOff {
+    0%, 100% {
+        box-shadow: 0 0 0 2px #fff, 0 0 0 4px #dc3545, 
+                    0 0 15px rgba(220, 53, 69, 0.6),
+                    inset 0 2px 4px rgba(255, 255, 255, 0.2);
+        transform: scale(1);
+    }
+    50% {
+        box-shadow: 0 0 0 2px #fff, 0 0 0 4px #dc3545, 
+                    0 0 20px rgba(220, 53, 69, 0.8),
+                    inset 0 2px 4px rgba(255, 255, 255, 0.3);
+        transform: scale(1.03);
+    }
+}
+
+/* Pump Name - Hidden by default, show on hover */
+.pump-name {
+    color: #003087;
+    font-size: 13px;
+    font-weight: 700;
+    text-align: center;
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: all 0.3s;
+    margin: 0;
+}
+
+.pump-overlay:hover .pump-name {
+    opacity: 1;
+    max-height: 30px;
+}
+
+/* Pump Icon Wrapper */
+.pump-icon-wrapper {
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: all 0.3s;
+}
+
+.pump-overlay:hover .pump-icon-wrapper {
+    opacity: 1;
+    max-height: 60px;
+}
+
+/* Pump Icon - Vibrating & Pulsing when ON */
+.pump-icon {
+    width: 45px;
+    height: 45px;
+    transition: all 0.3s;
+    filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.2));
+}
+
+.pump-icon.active {
+    animation: pumpVibrate 0.15s ease-in-out infinite, pumpPulse 1.5s ease-in-out infinite;
+    filter: drop-shadow(0 0 8px rgba(40, 167, 69, 0.6)) drop-shadow(0 2px 6px rgba(0, 0, 0, 0.2));
+}
+
+/* SCADA Animations */
+@keyframes statusPulse {
+    0%, 100% {
+        box-shadow: 0 0 0 2px #fff, 0 0 0 4px #28a745, 0 0 20px rgba(40, 167, 69, 0.8);
+    }
+    50% {
+        box-shadow: 0 0 0 2px #fff, 0 0 0 4px #28a745, 0 0 30px rgba(40, 167, 69, 1);
+    }
+}
+
+@keyframes ripple {
+    0% {
+        width: 100%;
+        height: 100%;
+        opacity: 0.8;
+    }
+    100% {
+        width: 200%;
+        height: 200%;
+        opacity: 0;
+    }
+}
+
+/* Pump Vibration - Shake effect */
+@keyframes pumpVibrate {
+    0%, 100% {
+        transform: translate(0, 0) rotate(0deg);
+    }
+    25% {
+        transform: translate(-1px, -1px) rotate(-1deg);
+    }
+    50% {
+        transform: translate(1px, 1px) rotate(1deg);
+    }
+    75% {
+        transform: translate(-1px, 1px) rotate(-0.5deg);
+    }
+}
+
+/* Pump Pulse - Scale effect */
+@keyframes pumpPulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.08);
+    }
+}
+
+/* Sidebar - OPTIMAL WIDTH */
+.sidebar {
+    width: 280px;             /* ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â Ãƒâ€šÃ‚Â Original width from user */
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-height: 100%;
+    overflow: hidden;
+}
+
+/* Legend - OPTIMAL SIZE with Horizontal Status Row */
+.legend {
+    background: white;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 4px 12px rgba(0, 48, 135, 0.1);
+    border-left: 4px solid #003087;
+    flex-shrink: 0;           /* Tidak shrink */
+}
+
+.legend h2 {
+    color: #003087;
+    font-size: 17px;
+    margin-bottom: 12px;
+    border-bottom: 2px solid #003087;
+    padding-bottom: 8px;
+}
+
+/* Status Row - OFF dan ON bersebelahan (FROM ORIGINAL FILE) */
+.legend-status-row {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 8px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 8px 0;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+/* Legend item dalam status row - tidak perlu margin vertical */
+.legend-status-row .legend-item {
+    margin: 0;
+}
+
+.legend-pump {
+    width: 35px;
+    height: 35px;
+}
+
+/* ======================================================
+   WATER LEVEL SCALE INFO - Keterangan Skala per CM
+   EDIT DISINI untuk mengubah tampilan scale info
+   ====================================================== */
+.legend-scale-info {
+    margin-top: 15px;
+    padding-top: 12px;
+    border-top: 1px solid #e8eef7;
+}
+
+.legend-scale-info h3 {
+    color: #003087;
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.scale-detail {
+    margin: 8px 0;
+    padding-left: 10px;
+}
+
+.scale-detail-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin: 6px 0;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.scale-detail-item .area-label {
+    color: #003087;
+    font-weight: 700;
+    min-width: 60px;
+}
+
+.scale-detail-item .scale-value {
+    color: #0051a5;
+    font-weight: 600;
+}
+
+.scale-detail-item .scale-max {
+    color: #666;
+    font-size: 11px;
+}
+
+/* Bullet point styling */
+.scale-detail-item::before {
+    content: "\2022";
+    color: #003087;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 1.2;
+}
+
+/* Water Level Section - FILL REMAINING SPACE */
+.water-level-section {
+    background: white;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 4px 12px rgba(0, 48, 135, 0.1);
+    flex: 1;                  /* ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â Ãƒâ€šÃ‚Â Ambil sisa ruang */
+    border-left: 4px solid #003087;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;            /* Important untuk flex child dengan overflow */
+}
+
+.water-level-section h2 {
+    color: #003087;
+    font-size: 17px;
+    margin-bottom: 12px;
+    border-bottom: 2px solid #003087;
+    padding-bottom: 8px;
+    flex-shrink: 0;           /* Header tidak shrink */
+}
+
+.water-levels {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    align-items: stretch;
+    flex: 1;                  /* ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â Ãƒâ€šÃ‚Â Ambil sisa ruang */
+    min-height: 0;
+}
+
+.water-level-container {
+    flex: 0 1 auto;
+    min-width: 110px;
+    max-width: 130px;
+    display: flex;
+    flex-direction: column;
+}
+
+.level-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 10px;
+    justify-content: center;
+    flex-shrink: 0;           /* Tidak shrink */
+}
+
+.small-pin {
+    width: 20px;
+    height: 20px;
+}
+
+.level-header h3 {
+    color: #003087;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+/* Level Bar - FLEXIBLE HEIGHT */
+.level-bar {
+    display: flex;
+    gap: 10px;
+    flex: 1;                  /* ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â Ãƒâ€šÃ‚Â Tinggi menyesuaikan ruang */
+    min-height: 200px;        /* Minimum tinggi */
+    max-height: 400px;        /* Maximum tinggi */
+    justify-content: center;
+}
+
+.level-scale {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    font-size: 12px;
+    color: #003087;
+    font-weight: 700;
+    padding-right: 5px;
+}
+
+.scale-number {
+    display: flex;
+    align-items: center;
+    line-height: 1;
+    flex: 1;                  /* Distribusi merata */
+}
+
+.level-fill {
+    width: 50px;
+    border: 3px solid #003087;
+    border-radius: 10px;
+    position: relative;
+    overflow: hidden;
+    background: #f8f9fa;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Level Marks - Garis Horizontal di setiap level */
+.level-marks {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.level-mark {
+    display: block;
+    width: 100%;
+    height: 1px;
+    background: rgba(0, 48, 135, 0.3);
+    position: relative;
+}
+
+.level-mark::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 30%;
+    height: 2px;
+    background: rgba(0, 48, 135, 0.5);
+    top: -0.5px;
+}
+
+.level-mark:first-child,
+.level-mark:nth-child(5),
+.level-mark:nth-child(11) {
+    background: rgba(0, 48, 135, 0.6);
+    height: 2px;
+}
+
+.level-mark:first-child::before,
+.level-mark:nth-child(5)::before,
+.level-mark:nth-child(11)::before {
+    width: 40%;
+    height: 2px;
+    background: rgba(0, 48, 135, 0.7);
+}
+
+.level-fill::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: var(--fill-height, 0%);  /* Ã¢Å“â€¦ GUNAKAN CSS VARIABLE */
+    transition: height 0.8s ease-out, background 0.3s;
+    background-size: 200% 200%;
+    animation: waterWave 3s ease-in-out infinite;
+    z-index: 2;
+}
+
+/* Water Level Colors with gradient - 3 STAGES ONLY */
+/* HIJAU: Level 0-5 (Normal) */
+.level-fill.level-0::after,
+.level-fill.level-1::after,
+.level-fill.level-2::after,
+.level-fill.level-3::after,
+.level-fill.level-4::after,
+.level-fill.level-5::after {
+    background: linear-gradient(180deg, #2ecc71 0%, #27ae60 100%);
+}
+
+/* KUNING: Level 6-7 (WARNING) */
+.level-fill.level-6::after,
+.level-fill.level-7::after {
+    background: linear-gradient(180deg, #f39c12 0%, #e67e22 100%);
+    animation: waterWave 2.5s ease-in-out infinite, warningBlink 1.5s ease-in-out infinite;
+}
+
+/* MERAH: Level 8-10 (CRITICAL/DANGER) */
+.level-fill.level-8::after,
+.level-fill.level-9::after,
+.level-fill.level-10::after {
+    background: linear-gradient(180deg, #e74c3c 0%, #c0392b 100%);
+    animation: waterWave 2s ease-in-out infinite, dangerBlink 1s ease-in-out infinite;
+}
+
+/* Water Wave Animation */
+@keyframes waterWave {
+    0%, 100% {
+        filter: brightness(1);
+        opacity: 1;
+    }
+    50% {
+        filter: brightness(1.1);
+        opacity: 0.95;
+    }
+}
+
+/* Warning Level Blink */
+@keyframes warningBlink {
+    0%, 100% {
+        box-shadow: inset 0 0 0px rgba(243, 156, 18, 0);
+    }
+    50% {
+        box-shadow: inset 0 0 15px rgba(243, 156, 18, 0.5);
+    }
+}
+
+/* Danger Level Blink */
+@keyframes dangerBlink {
+    0%, 100% {
+        box-shadow: inset 0 0 0px rgba(231, 76, 60, 0);
+    }
+    50% {
+        box-shadow: inset 0 0 20px rgba(231, 76, 60, 0.7);
+    }
+}
+
+/* Detail Page Styles */
+.detail-page .main-content {
+    padding: 0;
+}
+
+.detail-content {
+    display: flex;
+    gap: 30px;
+    padding: 30px;
+}
+
+.area-image {
+    flex: 1;
+    background: #f5f5f5;
+    border-radius: 10px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0, 48, 135, 0.1);
+    border-left: 4px solid #003087;
+}
+
+.area-image img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    object-fit: cover;
+}
+
+.control-panel {
+    width: 400px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+/* Pump Control */
+.pump-control {
+    background: white;
+    border-radius: 10px;
+    padding: 25px;
+    box-shadow: 0 4px 12px rgba(0, 48, 135, 0.1);
+    border-left: 4px solid #003087;
+}
+
+.pump-control h2 {
+    color: #003087;
+    font-size: 22px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #003087;
+    padding-bottom: 10px;
+}
+
+/* ======================================================
+   AUTO-PUMP CONTROL SECTION
+   Styling untuk toggle auto-pump dan status display
+   ====================================================== */
+.auto-pump-control {
+    background: white;
+    border-radius: 10px;
+    padding: 25px;
+    box-shadow: 0 4px 12px rgba(0, 48, 135, 0.1);
+    border-left: 4px solid #0051a5;
+    margin-top: 20px;
+}
+
+.auto-pump-control h2 {
+    color: #003087;
+    font-size: 22px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #003087;
+    padding-bottom: 10px;
+}
+
+.auto-pump-info {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.auto-pump-toggle-container {
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border: 2px solid #e8eef7;
+    transition: all 0.3s;
+}
+
+.auto-pump-toggle-container:hover {
+    border-color: #003087;
+    box-shadow: 0 2px 8px rgba(0, 48, 135, 0.1);
+}
+
+.pump-display {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    gap: 20px;
+}
+
+.large-pump {
+    width: 120px;
+    height: 120px;
+}
+
+.toggle-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    outline: none;
+}
+
+/* Modern Toggle Switch */
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 120px;
+    height: 60px;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 60px;
+    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3), inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 48px;
+    width: 48px;
+    left: 6px;
+    bottom: 6px;
+    background: white;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 50%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.toggle-switch input:checked + .toggle-slider {
+    background: linear-gradient(135deg, #28a745 0%, #218838 100%);
+    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3), inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.toggle-switch input:checked + .toggle-slider:before {
+    transform: translateX(60px);
+}
+
+.toggle-slider:after {
+    content: 'OFF';
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: white;
+    font-weight: 700;
+    font-size: 16px;
+    transition: opacity 0.3s;
+}
+
+.toggle-switch input:checked + .toggle-slider:after {
+    content: 'ON';
+    left: auto;
+    right: 22px;
+}
+
+/* Hover Effects */
+.toggle-slider:hover {
+    box-shadow: 0 6px 16px rgba(220, 53, 69, 0.4), inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.toggle-switch input:checked + .toggle-slider:hover {
+    box-shadow: 0 6px 16px rgba(40, 167, 69, 0.4), inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.toggle-slider:active:before {
+    width: 56px;
+}
+
+/* Pulse animation for ON state */
+@keyframes togglePulse {
+    0% {
+        box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3), inset 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    50% {
+        box-shadow: 0 4px 20px rgba(40, 167, 69, 0.5), inset 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    100% {
+        box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3), inset 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+}
+
+.toggle-switch input:checked + .toggle-slider {
+    animation: togglePulse 2s infinite;
+}
+
+/* Water Level Detail - OPTIMIZED */
+.water-level-detail {
+    background: white;
+    border-radius: 10px;
+    padding: 25px;
+    box-shadow: 0 4px 12px rgba(0, 48, 135, 0.1);
+    border-left: 4px solid #003087;
+}
+
+.water-level-detail h2 {
+    color: #003087;
+    font-size: 22px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #003087;
+    padding-bottom: 10px;
+}
+
+.level-display {
+    display: flex;
+    gap: 25px;
+    align-items: center;
+}
+
+.level-bar-large {
+    display: flex;
+    gap: 10px;
+    height: 220px;
+}
+
+.level-fill-large {
+    width: 70px;
+    border: 3px solid #003087;
+    border-radius: 10px;
+    position: relative;
+    overflow: hidden;
+    background: #f8f9fa;
+}
+
+/* Level Marks untuk detail pages juga */
+.level-fill-large .level-marks {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.level-fill-large .level-mark {
+    display: block;
+    width: 100%;
+    height: 1px;
+    background: rgba(0, 48, 135, 0.3);
+    position: relative;
+}
+
+.level-fill-large .level-mark::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 35%;
+    height: 2px;
+    background: rgba(0, 48, 135, 0.5);
+    top: -0.5px;
+}
+
+.level-fill-large .level-mark:first-child,
+.level-fill-large .level-mark:nth-child(5),
+.level-fill-large .level-mark:nth-child(11) {
+    background: rgba(0, 48, 135, 0.6);
+    height: 2px;
+}
+
+.level-fill-large .level-mark:first-child::before,
+.level-fill-large .level-mark:nth-child(5)::before,
+.level-fill-large .level-mark:nth-child(11)::before {
+    width: 45%;
+    height: 2px;
+    background: rgba(0, 48, 135, 0.7);
+}
+
+.level-fill-large::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: var(--fill-height, 0%);  /* Ã¢Å“â€¦ GUNAKAN CSS VARIABLE */
+    transition: all 0.5s ease;
+    z-index: 2;
+}
+
+/* Water Level Colors for Large Bar - 3 STAGES ONLY */
+/* HIJAU: Level 0-5 (Normal) */
+.level-fill-large.level-0::after,
+.level-fill-large.level-1::after,
+.level-fill-large.level-2::after,
+.level-fill-large.level-3::after,
+.level-fill-large.level-4::after,
+.level-fill-large.level-5::after {
+    background: linear-gradient(180deg, #2ecc71 0%, #27ae60 100%);
+}
+
+/* KUNING: Level 6-7 (WARNING) */
+.level-fill-large.level-6::after,
+.level-fill-large.level-7::after {
+    background: linear-gradient(180deg, #f39c12 0%, #e67e22 100%);
+    animation: waterWave 2.5s ease-in-out infinite, warningBlink 1.5s ease-in-out infinite;
+}
+
+/* MERAH: Level 8-10 (CRITICAL/DANGER) */
+.level-fill-large.level-8::after,
+.level-fill-large.level-9::after,
+.level-fill-large.level-10::after {
+    background: linear-gradient(180deg, #e74c3c 0%, #c0392b 100%);
+    animation: waterWave 2s ease-in-out infinite, dangerBlink 1s ease-in-out infinite;
+}
+
+/* Level Info */
+.level-info {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.level-info p {
+    font-size: 16px;
+    color: #333;
+    font-weight: 500;
+}
+
+.level-info span {
+    font-weight: 700;
+    font-size: 20px;
+}
+
+.level-value span {
+    color: #003087;
+}
+
+.level-cm span {
+    color: #0051a5;
+}
+
+.level-status {
+    padding: 10px 15px;
+    border-radius: 8px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 18px;
+}
+
+.level-status.normal {
+    background: #d4edda;
+    color: #155724;
+}
+
+.level-status.warning {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.level-status.danger {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+/* Responsive Design - ULTRA OPTIMIZED */
+/* Tablet Portrait & Mobile (max-width: 1024px) */
+@media (max-width: 1024px) {
+    .main-content {
+        flex-direction: column;
+        gap: 15px;
+        height: auto;
+        min-height: auto;
+    }
+
+    .sidebar {
+        width: 100%;
+    }
+    
+    .plant-map {
+        min-height: 400px;
+    }
+}
+
+/* Tablet & Large Mobile (max-width: 768px) */
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+
+    .container {
+        border-radius: 10px;
+    }
+
+    header {
+        flex-direction: column;
+        gap: 10px;
+        padding: 12px;
+    }
+
+    header h1 {
+        font-size: 16px;
+        margin-left: 0;
+        text-align: center;
+        line-height: 1.3;
+    }
+
+    .logo-link {
+        position: relative;
+        left: auto;
+        top: auto;
+        transform: none;
+        margin-bottom: 0;
+        background: white;
+        padding: 6px 12px;
+        border-radius: 6px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    .header-logo {
+        height: 30px;
+    }
+
+    .main-content {
+        padding: 15px;
+        gap: 15px;
+    }
+
+    /* Plant Map Optimization */
+    .plant-map {
+        padding: 10px;
+    }
+
+    #plantLayout {
+        width: 100%;
+        height: auto;
+    }
+
+    /* Pump Overlays - Touch Friendly */
+    .pump-overlay {
+        padding: 6px 8px;
+        min-width: 45px;
+        min-height: 45px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .pump-overlay:active {
+        transform: scale(calc(0.7 + 0.45 * min(100vw / 1920, 1)));
+    }
+    
+    .location-pin {
+        width: 22px;
+        height: 22px;
+    }
+    
+    .status-circle {
+        width: 22px;
+        height: 22px;
+    }
+    
+    .pump-name {
+        font-size: 11px;
+    }
+    
+    .pump-icon {
+        width: 35px;
+        height: 35px;
+    }
+
+    /* Legend Compact */
+    .legend {
+        padding: 12px;
+    }
+
+    .legend h2 {
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
+
+    .legend-item {
+        gap: 10px;
+        margin: 6px 0;
+        font-size: 13px;
+    }
+
+    .legend-pump {
+        width: 30px;
+        height: 30px;
+    }
+
+    /* Water Level Section */
+    .water-level-section {
+        padding: 12px;
+    }
+
+    .water-level-section h2 {
+        font-size: 16px;
+        margin-bottom: 12px;
+    }
+
+    .water-levels {
+        flex-direction: row;
+        gap: 20px;
+        justify-content: space-around;
+    }
+
+    .water-level-container {
+        min-width: 100px;
+        max-width: 140px;
+    }
+
+    .level-header h3 {
+        font-size: 13px;
+    }
+
+    .small-pin {
+        width: 18px;
+        height: 18px;
+    }
+
+    .level-bar {
+        height: 180px;
+        gap: 8px;
+    }
+
+    .level-scale {
+        font-size: 11px;
+    }
+
+    .scale-number {
+        height: 16.36px;
+    }
+
+    .level-fill {
+        width: 45px;
+    }
+
+    /* Detail Pages */
+    .detail-content {
+        flex-direction: column;
+        padding: 15px;
+        gap: 15px;
+    }
+
+    .control-panel {
+        width: 100%;
+    }
+
+    .area-image {
+        padding: 15px;
+    }
+    
+    .toggle-switch {
+        width: 100px;
+        height: 50px;
+    }
+    
+    .toggle-slider:before {
+        height: 40px;
+        width: 40px;
+        left: 5px;
+        bottom: 5px;
+    }
+    
+    .toggle-switch input:checked + .toggle-slider:before {
+        transform: translateX(50px);
+    }
+    
+    .toggle-slider:after {
+        font-size: 14px;
+        left: 15px;
+    }
+    
+    .toggle-switch input:checked + .toggle-slider:after {
+        right: 18px;
+    }
+}
+
+/* Mobile Portrait (max-width: 480px) with Percentage Positioning */
+@media (max-width: 480px) {
+    body {
+        padding: 5px;
+    }
+
+    header {
+        padding: 10px;
+    }
+
+    header h1 {
+        font-size: 14px;
+        line-height: 1.2;
+    }
+
+    .header-logo {
+        height: 25px;
+    }
+
+    .main-content {
+        padding: 10px;
+        gap: 10px;
+    }
+
+    /* Plant Map - Full Width */
+    .plant-map {
+        padding: 8px;
+        width: 100%;
+    }
+
+    /* Pump Overlays - Visible & Touch-Friendly with Percentage Positioning */
+    .pump-overlay {
+        padding: 6px;
+        min-width: 45px;
+        min-height: 45px;
+        border-width: 2px;
+    }
+
+    .pump-area-1 {
+        bottom: 18%;          /* ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â Ãƒâ€šÃ‚Â Percentage for consistency */
+        left: 5%;
+    }
+
+    .pump-area-2 {
+        top: 8%;
+        right: 15%;
+    }
+    
+    .location-pin {
+        width: 20px;
+        height: 20px;
+    }
+    
+    .status-circle {
+        width: 20px;
+        height: 20px;
+        border-width: 1.5px;
+    }
+
+    .pump-name {
+        font-size: 10px;
+    }
+    
+    .pump-icon {
+        width: 32px;
+        height: 32px;
+    }
+
+    /* Legend */
+    .legend {
+        padding: 10px;
+    }
+
+    .legend h2 {
+        font-size: 14px;
+        margin-bottom: 8px;
+    }
+
+    .legend-item {
+        gap: 8px;
+        margin: 5px 0;
+        font-size: 12px;
+    }
+
+    .legend-pump {
+        width: 25px;
+        height: 25px;
+    }
+
+    /* Water Level - Vertical Stack for Portrait */
+    .water-level-section {
+        padding: 10px;
+    }
+
+    .water-level-section h2 {
+        font-size: 14px;
+        margin-bottom: 10px;
+    }
+
+    .water-levels {
+        flex-direction: column;
+        gap: 15px;
+        align-items: center;
+    }
+
+    .water-level-container {
+        width: 100%;
+        max-width: 200px;
+    }
+
+    .level-header {
+        margin-bottom: 10px;
+    }
+
+    .level-header h3 {
+        font-size: 12px;
+    }
+
+    .small-pin {
+        width: 16px;
+        height: 16px;
+    }
+
+    .level-bar {
+        height: 160px;
+        gap: 8px;
+        justify-content: center;
+    }
+
+    .level-scale {
+        font-size: 10px;
+    }
+
+    .scale-number {
+        height: 14.54px;
+    }
+
+    .level-fill {
+        width: 40px;
+        border-width: 2px;
+    }
+
+    /* Detail Pages Mobile */
+    .pump-control h2,
+    .water-level-detail h2 {
+        font-size: 16px;
+    }
+
+    .pump-display {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .large-pump {
+        width: 100px;
+        height: 100px;
+    }
+
+    .toggle-switch {
+        width: 90px;
+        height: 45px;
+    }
+    
+    .toggle-slider:before {
+        height: 36px;
+        width: 36px;
+    }
+    
+    .toggle-switch input:checked + .toggle-slider:before {
+        transform: translateX(45px);
+    }
+
+    .level-bar-large {
+        height: 200px;
+    }
+
+    .level-fill-large {
+        width: 50px;
+    }
+}
+
+/* Mobile Landscape - Optimize for Horizontal Space */
+@media (max-height: 600px) and (orientation: landscape) {
+    body {
+        padding: 5px;
+    }
+
+    .container {
+        border-radius: 8px;
+        max-height: 98vh;
+    }
+
+    /* Minimal Header */
+    header {
+        padding: 8px 15px;
+        flex-direction: row;
+        gap: 15px;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    header h1 {
+        font-size: 14px;
+        margin-left: 0;
+        flex: 1;
+        text-align: center;
+    }
+
+    .logo-link {
+        position: relative;
+        padding: 4px 10px;
+        margin: 0;
+    }
+
+    .header-logo {
+        height: 25px;
+    }
+
+    /* Main Content - Maximize Horizontal Space */
+    .main-content {
+        flex-direction: row;
+        padding: 10px;
+        gap: 10px;
+        min-height: auto;
+        max-height: calc(100vh - 60px);
+    }
+
+    /* Plant Map - Full Height */
+    .plant-map {
+        flex: 1;
+        padding: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    #plantLayout {
+        max-height: calc(100vh - 100px);
+        width: auto;
+        height: auto;
+        object-fit: contain;
+    }
+
+    /* Sidebar - Compact Vertical */
+    .sidebar {
+        width: 200px;
+        flex-shrink: 0;
+        gap: 10px;
+        max-height: calc(100vh - 100px);
+        overflow-y: auto;
+    }
+
+    /* Legend - Ultra Compact */
+    .legend {
+        padding: 8px;
+    }
+
+    .legend h2 {
+        font-size: 13px;
+        margin-bottom: 6px;
+        padding-bottom: 4px;
+    }
+
+    .legend-item {
+        gap: 6px;
+        margin: 4px 0;
+        font-size: 11px;
+    }
+
+    .legend-pump {
+        width: 20px;
+        height: 20px;
+    }
+
+    .status-circle {
+        width: 16px;
+        height: 16px;
+    }
+
+    /* Water Level - Ultra Compact */
+    .water-level-section {
+        padding: 8px;
+    }
+
+    .water-level-section h2 {
+        font-size: 13px;
+        margin-bottom: 8px;
+        padding-bottom: 4px;
+    }
+
+    .water-levels {
+        flex-direction: row;
+        gap: 10px;
+        justify-content: center;
+    }
+
+    .water-level-container {
+        min-width: 70px;
+        max-width: 90px;
+    }
+
+    .level-header {
+        margin-bottom: 6px;
+    }
+
+    .level-header h3 {
+        font-size: 10px;
+    }
+
+    .small-pin {
+        width: 14px;
+        height: 14px;
+    }
+
+    .level-bar {
+        height: 100px;
+        gap: 6px;
+    }
+
+    .level-scale {
+        font-size: 9px;
+        padding-right: 3px;
+    }
+
+    .scale-number {
+        height: 9.09px;
+    }
+
+    .level-fill {
+        width: 35px;
+        border-width: 2px;
+    }
+
+    /* Pump Overlays - Prominent with Percentage Positioning */
+    .pump-overlay {
+        padding: 6px;
+        min-width: 40px;
+        min-height: 40px;
+    }
+
+    .pump-area-1 {
+        bottom: 20%;
+        left: 5%;
+    }
+
+    .pump-area-2 {
+        top: 10%;
+        right: 20%;
+    }
+    
+    .location-pin {
+        width: 18px;
+        height: 18px;
+    }
+    
+    .status-circle {
+        width: 18px;
+        height: 18px;
+    }
+
+    .pump-name {
+        font-size: 9px;
+    }
+    
+    .pump-icon {
+        width: 28px;
+        height: 28px;
+    }
+}
+
+/* Tablet Landscape (769px - 1024px) and landscape orientation */
+@media (min-width: 769px) and (max-width: 1024px) and (orientation: landscape) {
+    .main-content {
+        flex-direction: row;
+        gap: 20px;
+    }
+
+    .sidebar {
+        width: 300px;
+    }
+
+    .plant-map {
+        flex: 1;
+    }
+
+    #plantLayout {
+        max-width: 100%;
+        height: auto;
+    }
+}
+
+/* Small Mobile Landscape (max-width: 768px, landscape) */
+@media (max-width: 768px) and (orientation: landscape) {
+    header h1 {
+        font-size: 12px;
+    }
+
+    .sidebar {
+        width: 180px;
+    }
+
+    .water-levels {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .level-bar {
+        height: 100px;
+    }
+}
+
+/* Ultra Small Mobile (max-width: 360px) with Percentage Positioning */
+@media (max-width: 360px) {
+    header h1 {
+        font-size: 12px;
+    }
+
+    .pump-overlay {
+        min-width: 40px;
+        min-height: 40px;
+    }
+
+    .pump-area-1 {
+        bottom: 18%;          /* ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â Ãƒâ€šÃ‚Â Percentage for consistency */
+        left: 3%;
+    }
+
+    .pump-area-2 {
+        top: 6%;
+        right: 12%;
+    }
+
+    .status-circle {
+        width: 18px;
+        height: 18px;
+    }
+
+    .location-pin {
+        width: 18px;
+        height: 18px;
+    }
+
+    .level-fill {
+        width: 35px;
+    }
+
+    .water-level-container {
+        max-width: 180px;
+    }
+}
+
+/* Touch Enhancements for All Mobile Devices */
+@media (hover: none) and (pointer: coarse) {
+    /* Increase tap target sizes */
+    .pump-overlay {
+        min-width: 44px;
+        min-height: 44px;
+        cursor: pointer;
+    }
+
+    /* Remove hover states, use active instead */
+    .pump-overlay:hover {
+        transform: scale(1);
+    }
+
+    .pump-overlay:active {
+        transform: scale(1.08);
+        border-color: #0051a5;
+    }
+
+    /* Better touch feedback */
+    .toggle-switch {
+        cursor: pointer;
+    }
+
+    button, a, .clickable {
+        -webkit-tap-highlight-color: rgba(0, 48, 135, 0.2);
+    }
+}
+
+/* Animation - Keep for all sizes */
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+        box-shadow: 0 0 15px rgba(40, 167, 69, 0.6);
+    }
+    50% {
+        opacity: 0.8;
+        box-shadow: 0 0 25px rgba(40, 167, 69, 0.8);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.main-content,
+.detail-content {
+    animation: fadeIn 0.5s ease-out;
+}
