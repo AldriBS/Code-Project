@@ -2180,3 +2180,11 @@ header h1 {
     background: #003087;
     border-radius: 2px;
 }
+
+/* ======================================================
+   AREA 2 - MATCH AREA 1 LAYOUT
+   CSS khusus untuk halaman detail Area 2
+   ====================================================== */
+
+/* Area 2 uses same styles as Area 1 - no additional CSS needed */
+/* All .detail-page styles from Area 1 section apply to Area 2 as well */
