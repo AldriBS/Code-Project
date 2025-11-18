@@ -21,6 +21,7 @@
 #define ECHO_PIN        18
 #define CURRENT_PIN     34
 #define RELAY_PIN       21
+#define FLOW_SENSOR_PIN 19     // XKC-Y25-V Flow Sensor
 
 #define RELAY_ON_STATE   LOW   // LOW  = coil ON
 #define RELAY_OFF_STATE  HIGH  // HIGH = coil OFF (open drain hi-Z)
@@ -86,6 +87,7 @@ WiFiManager wifiManager;
 // ==================== DEVICE HEALTH INSTANCES ====================
 DeviceHealth ultrasonicHealth    = {DEV_UNKNOWN, "Unknown", 0, 0, 0, 0, false};
 DeviceHealth currentSensorHealth = {DEV_UNKNOWN, "Unknown", 0, 0, 0, 0, false};
+DeviceHealth flowSensorHealth    = {DEV_UNKNOWN, "Unknown", 0, 0, 0, 0, false};
 DeviceHealth relayHealth         = {DEV_UNKNOWN, "Unknown", 0, 0, 0, 0, false};
 DeviceHealth firebaseHealth      = {DEV_UNKNOWN, "Unknown", 0, 0, 0, 0, false};
 DeviceHealth wifiHealth          = {DEV_UNKNOWN, "Unknown", 0, 0, 0, 0, false};
@@ -97,6 +99,7 @@ float currentRMS      = 0.0;
 
 bool  pumpStatus      = false;   // status yang dikirim ke Firebase
 bool  lastPumpCommand = false;   // mirror /area2/pumpCommand
+bool  flowDetected    = false;   // status aliran air dari XKC-Y25-V
 
 // Timing variables
 unsigned long lastSensorRead      = 0;
@@ -113,6 +116,7 @@ void setupOTA();
 void initializeDevices();
 void readWaterLevel();
 void readCurrent();
+void readFlowSensor();
 void updateFirebase();
 void checkFirebaseCommand();
 void controlRelay(bool on);
@@ -138,6 +142,7 @@ void setup() {
   pinMode(TRIG_PIN,   OUTPUT);
   pinMode(ECHO_PIN,   INPUT);
   pinMode(CURRENT_PIN, INPUT);
+  pinMode(FLOW_SENSOR_PIN, INPUT);  // XKC-Y25-V Flow Sensor
 
   // Relay open-drain: HIGH = OFF, LOW = ON
   pinMode(RELAY_PIN, OUTPUT_OPEN_DRAIN);
@@ -170,6 +175,7 @@ void loop() {
   if (now - lastSensorRead >= SENSOR_INTERVAL) {
     readWaterLevel();
     readCurrent();
+    readFlowSensor();
     lastSensorRead = now;
   }
 
@@ -338,6 +344,7 @@ void initializeDevices() {
 
   updateDeviceStatus(ultrasonicHealth,    DEV_CHECKING, "Testing HC-SR04");
   updateDeviceStatus(currentSensorHealth,  DEV_CHECKING, "Calibrating");
+  updateDeviceStatus(flowSensorHealth,     DEV_CHECKING, "Testing XKC-Y25-V");
 }
 
 // ==================== WATER LEVEL READING ====================
@@ -540,6 +547,79 @@ void readCurrent() {
   }
 }
 
+// ==================== FLOW SENSOR READING ====================
+void readFlowSensor() {
+  // XKC-Y25-V: HIGH = aliran terdeteksi, LOW = tidak ada aliran
+  int flowSignal = digitalRead(FLOW_SENSOR_PIN);
+  bool currentFlowStatus = (flowSignal == HIGH);
+
+  // Update status jika ada perubahan
+  if (currentFlowStatus != flowDetected) {
+    flowDetected = currentFlowStatus;
+
+    Serial.println("━━━━━━━━━━━━━━━━━━━━━━━━━━");
+    Serial.println("💧 WATER FLOW STATUS CHANGE - Area 2");
+    Serial.println("━━━━━━━━━━━━━━━━━━━━━━━━━━");
+    Serial.printf("🌊 Flow Detected: %s\n", flowDetected ? "YES ✓" : "NO ✗");
+    Serial.println("━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+  }
+
+  // Update device health based on consistency check
+  // Jika relay ON tapi tidak ada aliran dalam waktu lama, mungkin ada masalah
+  static unsigned long lastFlowCheck = 0;
+  static int noFlowCounter = 0;
+
+  if (millis() - lastFlowCheck >= 5000) {  // Check setiap 5 detik
+    lastFlowCheck = millis();
+
+    // Jika pompa command ON tapi tidak ada aliran
+    if (lastPumpCommand && !flowDetected) {
+      noFlowCounter++;
+
+      if (noFlowCounter >= 6 && flowSensorHealth.status != DEV_ERROR) {  // 30 detik tanpa aliran
+        updateDeviceStatus(flowSensorHealth, DEV_ERROR, "No flow detected while pump ON");
+        if (millis() - flowSensorHealth.lastErrorReport > ERROR_DEBOUNCE_TIME) {
+          Serial.println("⚠️  XKC-Y25-V: Pump ON but no water flow detected!");
+          Serial.println("   Possible causes:");
+          Serial.println("   - Pump not working properly");
+          Serial.println("   - Flow sensor not installed correctly");
+          Serial.println("   - Blockage in pipe");
+          flowSensorHealth.lastErrorReport = millis();
+        }
+      }
+    } else if (flowDetected) {
+      noFlowCounter = 0;
+
+      if (flowSensorHealth.status != DEV_WORKING) {
+        updateDeviceStatus(flowSensorHealth, DEV_WORKING, "Flow sensor operational");
+        printDeviceStatusChange("XKC-Y25-V", flowSensorHealth);
+      }
+      flowSensorHealth.consecutiveSuccess++;
+      flowSensorHealth.consecutiveErrors = 0;
+      flowSensorHealth.hasEverWorked = true;
+
+      // Indikator tambahan: Jika ada aliran, pompa pasti nyala
+      // Ini memberikan konfirmasi ganda selain dari sensor arus
+      if (!pumpStatus) {
+        pumpStatus = true;
+        Serial.println("━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        Serial.println("⚡ PUMP STATUS CHANGE - Area 2 (by flow)");
+        Serial.println("━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        Serial.println("🌊 Flow Detected: Water is flowing");
+        Serial.println("🔌 Pump: ON ✓ (confirmed by flow sensor)");
+        Serial.println("━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+      }
+    } else {
+      noFlowCounter = 0;
+
+      // Status normal jika tidak ada command atau sesuai dengan command
+      if (flowSensorHealth.status == DEV_UNKNOWN) {
+        updateDeviceStatus(flowSensorHealth, DEV_WORKING, "Flow sensor ready");
+      }
+    }
+  }
+}
+
 // ==================== FIREBASE UPDATE ====================
 void updateFirebase() {
   if (!Firebase.ready()) {
@@ -559,11 +639,13 @@ void updateFirebase() {
   json.set("waterHeight", waterHeight);
   json.set("pumpStatus",  pumpStatus);
   json.set("current",     currentRMS);
+  json.set("flowDetected", flowDetected);
   json.set("timestamp",   getFormattedTime());
   json.set("online",      true);
 
   // tambahan opsional: laporkan sensorOnline ke web
   json.set("sensorOnline", ultrasonicHealth.status == DEV_WORKING);
+  json.set("flowSensorOnline", flowSensorHealth.status == DEV_WORKING);
 
   if (Firebase.RTDB.updateNode(&fbdo, "/area2", &json)) {
     if (firebaseHealth.status != DEV_WORKING) {
@@ -682,6 +764,10 @@ void printStartupHealthCheck() {
                 getDeviceStatusIcon(currentSensorHealth.status).c_str(),
                 currentSensorHealth.statusText.c_str());
 
+  Serial.printf("│ %s XKC-Y25-V: %s\n",
+                getDeviceStatusIcon(flowSensorHealth.status).c_str(),
+                flowSensorHealth.statusText.c_str());
+
   Serial.printf("│ %s Relay: %s\n",
                 getDeviceStatusIcon(relayHealth.status).c_str(),
                 relayHealth.statusText.c_str());
@@ -713,6 +799,14 @@ void printPeriodicHealthReport() {
                 getDeviceStatusText(currentSensorHealth.status).c_str());
   if (currentSensorHealth.status == DEV_WORKING) {
     Serial.printf(" | Current: %.2fA\n", currentRMS);
+  } else {
+    Serial.println();
+  }
+
+  Serial.printf("💧 XKC-Y25-V: %s",
+                getDeviceStatusText(flowSensorHealth.status).c_str());
+  if (flowSensorHealth.status == DEV_WORKING) {
+    Serial.printf(" | Flow: %s\n", flowDetected ? "YES" : "NO");
   } else {
     Serial.println();
   }
