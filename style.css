@@ -1867,8 +1867,8 @@ header h1 {
 /* Fit sempurna dalam 1 viewport tanpa scroll */
 
 .detail-page .detail-content {
-    padding: 8px !important;
-    gap: 8px !important;
+    padding: 6px !important;
+    gap: 6px !important;
     height: calc(100vh - 80px) !important;
     max-height: calc(100vh - 80px) !important;
     overflow: hidden !important;
@@ -1878,11 +1878,11 @@ header h1 {
 /* Left Section - Image + Info */
 .detail-page .area-image {
     flex: 0 0 45% !important;
-    padding: 8px !important;
+    padding: 6px !important;
     max-height: 100% !important;
     display: flex !important;
     flex-direction: column !important;
-    gap: 8px !important;
+    gap: 6px !important;
 }
 
 .detail-page .image-container {
@@ -1892,7 +1892,7 @@ header h1 {
     justify-content: center;
     background: #f8f9fa;
     border-radius: 8px;
-    padding: 10px;
+    padding: 8px;
     border: 2px solid #e8eef7;
 }
 
@@ -1907,42 +1907,42 @@ header h1 {
 .detail-page .area-info-box {
     background: linear-gradient(135deg, #003087 0%, #0056b3 100%);
     color: white;
-    padding: 10px;
+    padding: 8px;
     border-radius: 8px;
-    font-size: 11px;
+    font-size: 10px;
     line-height: 1.4;
 }
 
 .detail-page .area-info-box h3 {
-    margin: 0 0 8px 0;
-    font-size: 13px;
+    margin: 0 0 6px 0;
+    font-size: 12px;
     border-bottom: 1px solid rgba(255,255,255,0.3);
-    padding-bottom: 5px;
+    padding-bottom: 4px;
 }
 
 .detail-page .info-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 6px;
-    margin-top: 8px;
+    gap: 5px;
+    margin-top: 6px;
 }
 
 .detail-page .info-item {
     background: rgba(255,255,255,0.1);
-    padding: 5px 8px;
+    padding: 4px 6px;
     border-radius: 4px;
 }
 
 .detail-page .info-item strong {
     display: block;
-    font-size: 12px;
+    font-size: 11px;
     margin-bottom: 2px;
 }
 
 /* Control Panel - Compact */
 .detail-page .control-panel {
     flex: 1 1 55% !important;
-    gap: 6px !important;
+    gap: 5px !important;
     overflow-y: auto !important;
     overflow-x: hidden !important;
     max-height: 100% !important;
@@ -1955,7 +1955,7 @@ header h1 {
 .detail-page .pump-control,
 .detail-page .auto-pump-control,
 .detail-page .water-level-detail {
-    padding: 8px !important;
+    padding: 6px !important;
     margin-top: 0 !important;
     flex-shrink: 0 !important;
     background: white;
@@ -1967,25 +1967,25 @@ header h1 {
 .detail-page .pump-control h2,
 .detail-page .auto-pump-control h2,
 .detail-page .water-level-detail h2 {
-    font-size: 14px !important;
-    margin: 0 0 6px 0 !important;
-    padding-bottom: 4px !important;
+    font-size: 13px !important;
+    margin: 0 0 5px 0 !important;
+    padding-bottom: 3px !important;
     color: #003087;
     border-bottom: 2px solid #e8eef7;
 }
 
 /* Pump Display - Compact */
 .detail-page .pump-display {
-    gap: 8px !important;
-    padding: 4px 0 !important;
+    gap: 6px !important;
+    padding: 3px 0 !important;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
 .detail-page .large-pump {
-    width: 60px !important;
-    height: 60px !important;
+    width: 55px !important;
+    height: 55px !important;
 }
 
 /* Toggle Switch - Lebih Kecil */
@@ -2017,21 +2017,21 @@ header h1 {
 
 /* Auto-pump section - Compact */
 .detail-page .auto-pump-info > p {
-    font-size: 10px !important;
-    margin-bottom: 6px !important;
+    font-size: 9px !important;
+    margin-bottom: 4px !important;
     line-height: 1.3 !important;
     color: #666 !important;
 }
 
 .detail-page .auto-pump-toggle-container {
-    padding: 6px !important;
+    padding: 5px !important;
     background: #f8f9fa !important;
     border-radius: 5px !important;
     border: 1px solid #e8eef7 !important;
 }
 
 .detail-page .auto-pump-toggle-container strong {
-    font-size: 11px !important;
+    font-size: 10px !important;
 }
 
 .detail-page .auto-pump-toggle-container .toggle-switch {
@@ -2060,16 +2060,16 @@ header h1 {
 }
 
 .detail-page .auto-pump-details {
-    margin-top: 6px !important;
-    padding: 6px !important;
+    margin-top: 5px !important;
+    padding: 5px !important;
     font-size: 9px !important;
     background: #f8f9fa !important;
     border-radius: 5px !important;
 }
 
 .detail-page .safety-notice {
-    margin-top: 6px !important;
-    padding: 6px !important;
+    margin-top: 5px !important;
+    padding: 5px !important;
     font-size: 9px !important;
     line-height: 1.3 !important;
     background: #fff3cd !important;
@@ -2080,12 +2080,12 @@ header h1 {
 
 /* Water Level Display - Compact */
 .detail-page .level-bar-large {
-    height: 140px !important;
-    width: 50px !important;
+    height: 130px !important;
+    width: 45px !important;
 }
 
 .detail-page .level-display {
-    gap: 8px !important;
+    gap: 6px !important;
     display: flex;
     align-items: center;
 }
@@ -2095,27 +2095,27 @@ header h1 {
 }
 
 .detail-page .level-info p {
-    font-size: 11px !important;
-    margin-bottom: 4px !important;
+    font-size: 10px !important;
+    margin-bottom: 3px !important;
 }
 
 .detail-page .level-info span {
-    font-size: 15px !important;
+    font-size: 14px !important;
     font-weight: 600;
 }
 
 .detail-page .level-status {
-    padding: 5px 8px !important;
-    font-size: 12px !important;
-    border-radius: 5px;
+    padding: 4px 6px !important;
+    font-size: 11px !important;
+    border-radius: 4px;
     font-weight: 600;
     text-align: center;
 }
 
 /* Legend kompak */
 .detail-page .level-scale {
-    width: 35px;
-    font-size: 10px;
+    width: 30px;
+    font-size: 9px;
 }
 
 /* Scrollbar custom */
