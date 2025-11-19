@@ -133,14 +133,5 @@ async function setFirstAdmin() {
 }
 
 // ==================== RUN ====================
-// Check if email was changed
-if (EMAIL_ADMIN === 'admin@example.com') {
-    console.error('\n⚠️  WARNING: Please edit this file first!');
-    console.error('   Change EMAIL_ADMIN to your actual email address');
-    console.error('   Line 20: const EMAIL_ADMIN = "your-email@example.com";');
-    console.error('');
-    process.exit(1);
-}
-
-// Run the function
+// Run the function directly
 setFirstAdmin();
