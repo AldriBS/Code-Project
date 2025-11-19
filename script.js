@@ -297,7 +297,8 @@ function setupFirebaseListeners() {
                 servoPosition: data.servoPosition ?? 0,
                 servoState: data.servoState ?? 'IDLE',
                 timestamp: data.timestamp ?? 'N/A',
-                online: data.online ?? false
+                online: data.online ?? false,
+                sensorOnline: data.sensorOnline ?? true
             };
             
             updateArea1UI();
@@ -335,7 +336,8 @@ function setupFirebaseListeners() {
                 pumpStatus: data.pumpStatus ?? false,
                 current: data.current ?? 0,
                 timestamp: data.timestamp ?? 'N/A',
-                online: data.online ?? false
+                online: data.online ?? false,
+                sensorOnline: data.sensorOnline ?? true
             };
             
             updateArea2UI();
