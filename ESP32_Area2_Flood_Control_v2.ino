@@ -117,6 +117,7 @@ void initializeDevices();
 void readWaterLevel();
 void readCurrent();
 void readFlowSensor();
+void updatePumpStatus();
 void updateFirebase();
 void checkFirebaseCommand();
 void controlRelay(bool on);
@@ -176,6 +177,7 @@ void loop() {
     readWaterLevel();
     readCurrent();
     readFlowSensor();
+    updatePumpStatus();  // Gabungkan 3 indikator untuk status pompa akurat
     lastSensorRead = now;
   }
 
@@ -524,21 +526,6 @@ void readCurrent() {
       currentSensorHealth.hasEverWorked = true;
     }
 
-    // Jika SCT WORKING, status pompa ikut arus aktual
-    if (currentSensorHealth.status == DEV_WORKING) {
-      bool currentPumpStatus = (currentRMS >= PUMP_THRESHOLD);
-      if (currentPumpStatus != pumpStatus) {
-        pumpStatus = currentPumpStatus;
-
-        Serial.println("━━━━━━━━━━━━━━━━━━━━━━━━━━");
-        Serial.println("⚡ PUMP STATUS CHANGE - Area 2 (by current)");
-        Serial.println("━━━━━━━━━━━━━━━━━━━━━━━━━━");
-        Serial.printf("📊 Current: %.2f A\n", currentRMS);
-        Serial.printf("🔌 Pump: %s\n", pumpStatus ? "ON ✓" : "OFF ✗");
-        Serial.println("━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-      }
-    }
-
   } else {
     if (currentSensorHealth.status != DEV_ERROR) {
       updateDeviceStatus(currentSensorHealth, DEV_ERROR, "Too many invalid samples");
@@ -597,18 +584,6 @@ void readFlowSensor() {
       flowSensorHealth.consecutiveSuccess++;
       flowSensorHealth.consecutiveErrors = 0;
       flowSensorHealth.hasEverWorked = true;
-
-      // Indikator tambahan: Jika ada aliran, pompa pasti nyala
-      // Ini memberikan konfirmasi ganda selain dari sensor arus
-      if (!pumpStatus) {
-        pumpStatus = true;
-        Serial.println("━━━━━━━━━━━━━━━━━━━━━━━━━━");
-        Serial.println("⚡ PUMP STATUS CHANGE - Area 2 (by flow)");
-        Serial.println("━━━━━━━━━━━━━━━━━━━━━━━━━━");
-        Serial.println("🌊 Flow Detected: Water is flowing");
-        Serial.println("🔌 Pump: ON ✓ (confirmed by flow sensor)");
-        Serial.println("━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-      }
     } else {
       noFlowCounter = 0;
 
@@ -617,6 +592,69 @@ void readFlowSensor() {
         updateDeviceStatus(flowSensorHealth, DEV_WORKING, "Flow sensor ready");
       }
     }
+  }
+}
+
+// ==================== UPDATE PUMP STATUS (3 INDICATORS) ====================
+void updatePumpStatus() {
+  /*
+   * LOGIKA GABUNGAN 3 INDIKATOR UNTUK STATUS POMPA AKURAT:
+   *
+   * PRIORITAS 1 - Flow Sensor (XKC-Y25-V):
+   *   Jika ada aliran air -> Pompa PASTI ON
+   *
+   * PRIORITAS 2 - Current Sensor (SCT013):
+   *   Jika ada arus -> Pompa kemungkinan ON
+   *
+   * PRIORITAS 3 - Command (lastPumpCommand):
+   *   Fallback jika sensor tidak tersedia/error
+   */
+
+  bool previousPumpStatus = pumpStatus;
+  String detectionMethod = "";
+
+  // PRIORITAS 1: Flow Sensor - Indikator paling akurat
+  if (flowSensorHealth.status == DEV_WORKING) {
+    if (flowDetected) {
+      pumpStatus = true;
+      detectionMethod = "Flow Sensor (XKC-Y25-V)";
+    }
+    // Jika flow sensor working tapi tidak ada aliran
+    else {
+      // Cek indikator kedua: Current Sensor
+      if (currentSensorHealth.status == DEV_WORKING && currentRMS >= PUMP_THRESHOLD) {
+        pumpStatus = true;
+        detectionMethod = "Current Sensor (SCT013)";
+      } else {
+        pumpStatus = false;
+        detectionMethod = "Flow Sensor (no flow detected)";
+      }
+    }
+  }
+  // PRIORITAS 2: Jika flow sensor tidak tersedia, gunakan current sensor
+  else if (currentSensorHealth.status == DEV_WORKING) {
+    pumpStatus = (currentRMS >= PUMP_THRESHOLD);
+    detectionMethod = pumpStatus ? "Current Sensor (SCT013)" : "Current Sensor (no current)";
+  }
+  // PRIORITAS 3: Fallback ke command terakhir jika semua sensor error
+  else {
+    pumpStatus = lastPumpCommand;
+    detectionMethod = "Command Fallback (sensors unavailable)";
+  }
+
+  // Report perubahan status
+  if (pumpStatus != previousPumpStatus) {
+    Serial.println("━━━━━━━━━━━━━━━━━━━━━━━━━━");
+    Serial.println("⚡ PUMP STATUS CHANGE - Area 2");
+    Serial.println("━━━━━━━━━━━━━━━━━━━━━━━━━━");
+    Serial.printf("🔌 Status: %s\n", pumpStatus ? "ON ✓" : "OFF ✗");
+    Serial.printf("📊 Detection Method: %s\n", detectionMethod.c_str());
+    Serial.println("━━━━━━━━━━━━━━━━━━━━━━━━━━");
+    Serial.println("📈 Sensor Readings:");
+    Serial.printf("   💧 Flow: %s\n", flowDetected ? "YES" : "NO");
+    Serial.printf("   ⚡ Current: %.2f A\n", currentRMS);
+    Serial.printf("   🎛️  Command: %s\n", lastPumpCommand ? "ON" : "OFF");
+    Serial.println("━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
   }
 }
 
@@ -629,10 +667,7 @@ void updateFirebase() {
     return;
   }
 
-  // Kalau SCT TIDAK WORKING, status pompa dikunci ke perintah terakhir
-  if (currentSensorHealth.status != DEV_WORKING) {
-    pumpStatus = lastPumpCommand;
-  }
+  // Status pompa sudah ditentukan oleh updatePumpStatus() dengan 3 indikator
 
   FirebaseJson json;
   json.set("waterLevel",  waterLevel);
@@ -679,11 +714,6 @@ void checkFirebaseCommand() {
     if (command != lastPumpCommand) {
       lastPumpCommand = command;
 
-      // Kalau SCT belum WORKING, status pompa virtual ikut perintah
-      if (currentSensorHealth.status != DEV_WORKING) {
-        pumpStatus = command;
-      }
-
       Serial.println("━━━━━━━━━━━━━━━━━━━━━━━━━━");
       Serial.println("📱 COMMAND FROM WEB (Area 2)");
       Serial.println("━━━━━━━━━━━━━━━━━━━━━━━━━━");
@@ -693,14 +723,12 @@ void checkFirebaseCommand() {
       // Jalankan relay
       controlRelay(command);
 
-      // Kalau current sensor belum WORKING, status pompa ikut perintah
-      if (currentSensorHealth.status != DEV_WORKING) {
-        pumpStatus = command;
-      }
+      // Update status pompa berdasarkan 3 indikator
+      updatePumpStatus();
 
       // KIRIM KONFIRMASI LANGSUNG ke Firebase
       updateFirebase();
-      
+
     }
   }
 }
