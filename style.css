@@ -41,8 +41,8 @@ header {
 }
 
 header h1 {
-    font-size: 26px;
-    font-weight: 600;
+    font-size: 28px;
+    font-weight: 700;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
     flex: 1;
     margin-left: 100px;
@@ -427,7 +427,7 @@ header h1 {
 
 /* Sidebar - OPTIMAL WIDTH */
 .sidebar {
-    width: 280px;             /* ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â Ãƒâ€šÃ‚Â Original width from user */
+    width: 340px;             /* ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â Ãƒâ€šÃ‚Â Original width from user */
     display: flex;
     flex-direction: column;
     gap: 15px;
@@ -439,7 +439,7 @@ header h1 {
 .legend {
     background: white;
     border-radius: 10px;
-    padding: 15px;
+    padding: 18px;
     box-shadow: 0 4px 12px rgba(0, 48, 135, 0.1);
     border-left: 4px solid #003087;
     flex-shrink: 0;           /* Tidak shrink */
@@ -447,10 +447,11 @@ header h1 {
 
 .legend h2 {
     color: #003087;
-    font-size: 17px;
-    margin-bottom: 12px;
-    border-bottom: 2px solid #003087;
-    padding-bottom: 8px;
+    font-size: 20px;
+    margin-bottom: 14px;
+    border-bottom: 3px solid #003087;
+    padding-bottom: 10px;
+    font-weight: 700;
 }
 
 /* Status Row - OFF dan ON bersebelahan (FROM ORIGINAL FILE) */
@@ -463,10 +464,10 @@ header h1 {
 .legend-item {
     display: flex;
     align-items: center;
-    gap: 10px;
-    margin: 8px 0;
-    font-weight: 500;
-    font-size: 14px;
+    gap: 12px;
+    margin: 10px 0;
+    font-weight: 600;
+    font-size: 16px;
 }
 
 /* Legend item dalam status row - tidak perlu margin vertical */
@@ -475,8 +476,8 @@ header h1 {
 }
 
 .legend-pump {
-    width: 35px;
-    height: 35px;
+    width: 42px;
+    height: 42px;
 }
 
 /* ======================================================
@@ -491,12 +492,12 @@ header h1 {
 
 .legend-scale-info h3 {
     color: #003087;
-    font-size: 13px;
+    font-size: 16px;
     font-weight: 700;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
 }
 
 .scale-detail {
@@ -507,10 +508,10 @@ header h1 {
 .scale-detail-item {
     display: flex;
     align-items: flex-start;
-    gap: 8px;
-    margin: 6px 0;
-    font-size: 12px;
-    line-height: 1.5;
+    gap: 10px;
+    margin: 8px 0;
+    font-size: 14px;
+    line-height: 1.6;
 }
 
 .scale-detail-item .area-label {
@@ -526,7 +527,7 @@ header h1 {
 
 .scale-detail-item .scale-max {
     color: #666;
-    font-size: 11px;
+    font-size: 13px;
 }
 
 /* Bullet point styling */
@@ -534,7 +535,7 @@ header h1 {
     content: "\2022";
     color: #003087;
     font-weight: bold;
-    font-size: 16px;
+    font-size: 18px;
     line-height: 1.2;
 }
 
@@ -553,10 +554,11 @@ header h1 {
 
 .water-level-section h2 {
     color: #003087;
-    font-size: 17px;
-    margin-bottom: 12px;
-    border-bottom: 2px solid #003087;
-    padding-bottom: 8px;
+    font-size: 20px;
+    margin-bottom: 14px;
+    border-bottom: 3px solid #003087;
+    padding-bottom: 10px;
+    font-weight: 700;
     flex-shrink: 0;           /* Header tidak shrink */
 }
 
@@ -587,13 +589,13 @@ header h1 {
 }
 
 .small-pin {
-    width: 20px;
-    height: 20px;
+    width: 24px;
+    height: 24px;
 }
 
 .level-header h3 {
     color: #003087;
-    font-size: 13px;
+    font-size: 16px;
     font-weight: 700;
 }
 
@@ -611,10 +613,10 @@ header h1 {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    font-size: 12px;
+    font-size: 15px;
     color: #003087;
     font-weight: 700;
-    padding-right: 5px;
+    padding-right: 8px;
 }
 
 .scale-number {
@@ -625,9 +627,9 @@ header h1 {
 }
 
 .level-fill {
-    width: 50px;
-    border: 3px solid #003087;
-    border-radius: 10px;
+    width: 65px;
+    border: 4px solid #003087;
+    border-radius: 12px;
     position: relative;
     overflow: hidden;
     background: #f8f9fa;

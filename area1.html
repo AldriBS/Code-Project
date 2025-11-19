@@ -177,9 +177,9 @@
                     // Update status text
                     const statusText = document.getElementById('autoPumpStatus1');
                     if (statusText) {
-                        statusText.innerHTML = config.enabled 
-                            ? '<span style="color: #28a745; font-weight: 600;">✓ Enabled</span>' 
-                            : '<span style="color: #dc3545; font-weight: 600;">✕ Disabled</span>';
+                        statusText.textContent = config.enabled ? '✓ Enabled' : '✕ Disabled';
+                        statusText.style.color = config.enabled ? '#28a745' : '#dc3545';
+                        statusText.style.fontWeight = '600';
                     }
                     
                     // Update levels
