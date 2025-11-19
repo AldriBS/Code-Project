@@ -9,12 +9,11 @@ function setupContentSecurityPolicy() {
     meta.httpEquiv = 'Content-Security-Policy';
     meta.content = `
         default-src 'self';
-        script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.gstatic.com https://*.firebaseio.com https://*.googleapis.com;
+        script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.gstatic.com https://*.firebaseio.com https://*.googleapis.com https://*.gstatic.com;
         style-src 'self' 'unsafe-inline';
         img-src 'self' data: https:;
         font-src 'self' data:;
-        connect-src 'self' https://*.firebaseio.com https://*.googleapis.com wss://*.firebaseio.com;
-        frame-ancestors 'none';
+        connect-src 'self' https://*.firebaseio.com https://*.googleapis.com wss://*.firebaseio.com wss://*.firebasedatabase.app;
         base-uri 'self';
         form-action 'self';
     `.replace(/\s+/g, ' ').trim();
@@ -27,17 +26,8 @@ function setupContentSecurityPolicy() {
 // 2. SECURITY HEADERS
 // ==========================================
 function setupSecurityHeaders() {
-    // X-Frame-Options: Prevent clickjacking
-    const xFrameOptions = document.createElement('meta');
-    xFrameOptions.httpEquiv = 'X-Frame-Options';
-    xFrameOptions.content = 'DENY';
-    document.head.appendChild(xFrameOptions);
-
-    // X-Content-Type-Options: Prevent MIME sniffing
-    const xContentType = document.createElement('meta');
-    xContentType.httpEquiv = 'X-Content-Type-Options';
-    xContentType.content = 'nosniff';
-    document.head.appendChild(xContentType);
+    // NOTE: X-Frame-Options and X-Content-Type-Options can only be set
+    // via HTTP headers, not meta tags. Use .htaccess or server config instead.
 
     // Referrer-Policy: Control referrer information
     const referrerPolicy = document.createElement('meta');
@@ -46,6 +36,7 @@ function setupSecurityHeaders() {
     document.head.appendChild(referrerPolicy);
 
     console.log('✅ Security headers configured');
+    console.log('ℹ️  Note: X-Frame-Options must be set via HTTP headers (.htaccess)');
 }
 
 // ==========================================
@@ -361,6 +352,11 @@ function setupSecureSession() {
 // 11. PREVENT DEVTOOLS TAMPERING
 // ==========================================
 function detectDevTools() {
+    // DISABLED: Too aggressive, causes infinite Firebase connection errors
+    // DevTools detection can be monitored via server logs instead
+    console.log('ℹ️  DevTools detection disabled (use server-side monitoring)');
+
+    /* Original code - DISABLED
     const threshold = 160;
     let devtoolsOpen = false;
 
@@ -376,6 +372,7 @@ function detectDevTools() {
             devtoolsOpen = false;
         }
     }, 1000);
+    */
 }
 
 // ==========================================
