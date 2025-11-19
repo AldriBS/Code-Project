@@ -93,27 +93,37 @@ function displayUserRole() {
             const roleText = isAdmin ? 'Admin' : 'User';
             const roleColor = isAdmin ? '#ffd700' : '#4CAF50';
 
-            userInfoDiv.innerHTML = `
-                <span style="margin-right: 10px; display: flex; align-items: center; gap: 5px;">
-                    <span style="background: ${roleColor}; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600;">
-                        ${roleIcon} ${roleText}
-                    </span>
-                    <span>${user.email}</span>
-                </span>
-                <button onclick="logout()" style="
-                    background: rgba(255,255,255,0.2);
-                    border: 1px solid rgba(255,255,255,0.3);
-                    color: white;
-                    padding: 5px 12px;
-                    border-radius: 4px;
-                    cursor: pointer;
-                    font-size: 12px;
-                    transition: all 0.3s;
-                " onmouseover="this.style.background='rgba(255,255,255,0.3)'"
-                   onmouseout="this.style.background='rgba(255,255,255,0.2)'">
-                    Logout
-                </button>
-            `;
+            // Clear existing content
+            userInfoDiv.innerHTML = '';
+
+            // Create wrapper span for role and email
+            const wrapperSpan = document.createElement('span');
+            wrapperSpan.style.cssText = 'margin-right: 10px; display: flex; align-items: center; gap: 5px;';
+
+            // Create role badge
+            const roleBadge = document.createElement('span');
+            roleBadge.style.cssText = 'background: ' + roleColor + '; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600;';
+            roleBadge.textContent = roleIcon + ' ' + roleText;
+
+            // Create email span
+            const emailSpan = document.createElement('span');
+            emailSpan.textContent = user.email;
+
+            // Append to wrapper
+            wrapperSpan.appendChild(roleBadge);
+            wrapperSpan.appendChild(emailSpan);
+
+            // Create logout button
+            const logoutBtn = document.createElement('button');
+            logoutBtn.textContent = 'Logout';
+            logoutBtn.style.cssText = 'background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 5px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; transition: all 0.3s;';
+            logoutBtn.onclick = logout;
+            logoutBtn.onmouseover = function() { this.style.background = 'rgba(255,255,255,0.3)'; };
+            logoutBtn.onmouseout = function() { this.style.background = 'rgba(255,255,255,0.2)'; };
+
+            // Append all to userInfo
+            userInfoDiv.appendChild(wrapperSpan);
+            userInfoDiv.appendChild(logoutBtn);
         }
     }
 }
