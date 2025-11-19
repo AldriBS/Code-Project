@@ -156,11 +156,11 @@ function startSensorTimeoutChecker(area) {
 function showSensorOfflineIndicator(area) {
     const areaNum = area === 'area1' ? 1 : 2;
     const indicatorId = `sensor-offline-${areaNum}`;
-    
+
     // Remove existing indicator
     const existing = document.getElementById(indicatorId);
     if (existing) existing.remove();
-    
+
     // Create indicator
     const indicator = document.createElement('div');
     indicator.id = indicatorId;
@@ -176,17 +176,26 @@ function showSensorOfflineIndicator(area) {
         z-index: 9998;
         font-weight: 600;
         animation: pulse 2s infinite;
+        display: flex;
+        align-items: center;
+        gap: 10px;
     `;
-    indicator.innerHTML = `
-        ⚠️ Area ${areaNum} Sensor OFFLINE
-        <button onclick="document.getElementById('${indicatorId}').remove()" 
-                style="background: none; border: 2px solid white; color: white; 
-                       padding: 5px 10px; margin-left: 10px; border-radius: 5px; 
-                       cursor: pointer; font-weight: 600;">
-            ✕
-        </button>
-    `;
-    
+
+    // Create text node
+    const text = document.createTextNode(`⚠️ Area ${areaNum} Sensor OFFLINE`);
+
+    // Create close button
+    const closeBtn = document.createElement('button');
+    closeBtn.textContent = '✕';
+    closeBtn.style.cssText = 'background: none; border: 2px solid white; color: white; padding: 5px 10px; margin-left: 10px; border-radius: 5px; cursor: pointer; font-weight: 600;';
+    closeBtn.onclick = function() {
+        document.getElementById(indicatorId).remove();
+    };
+
+    // Append elements
+    indicator.appendChild(text);
+    indicator.appendChild(closeBtn);
+
     document.body.appendChild(indicator);
 }
 
