@@ -1914,19 +1914,20 @@ header h1 {
 .detail-page .area-info-box {
     background: linear-gradient(135deg, #003087 0%, #0056b3 100%);
     color: white;
-    padding: 15px;
+    padding: 18px;
     border-radius: 8px;
-    font-size: 13px;
-    line-height: 1.5;
-    margin-bottom: 15px;
+    font-size: 15px;
+    line-height: 1.6;
+    margin-bottom: 18px;
     box-shadow: 0 2px 8px rgba(0, 48, 135, 0.2);
 }
 
 .detail-page .area-info-box h3 {
-    margin: 0 0 10px 0;
-    font-size: 16px;
-    border-bottom: 1px solid rgba(255,255,255,0.3);
-    padding-bottom: 6px;
+    margin: 0 0 12px 0;
+    font-size: 19px;
+    font-weight: 700;
+    border-bottom: 2px solid rgba(255,255,255,0.3);
+    padding-bottom: 8px;
 }
 
 .detail-page .info-grid {
@@ -1938,14 +1939,15 @@ header h1 {
 
 .detail-page .info-item {
     background: rgba(255,255,255,0.1);
-    padding: 7px 10px;
-    border-radius: 4px;
+    padding: 9px 12px;
+    border-radius: 5px;
 }
 
 .detail-page .info-item strong {
     display: block;
-    font-size: 13px;
-    margin-bottom: 3px;
+    font-size: 15px;
+    margin-bottom: 4px;
+    font-weight: 600;
 }
 
 /* Control Panel - Match index.html */
@@ -1983,11 +1985,12 @@ header h1 {
 .detail-page .pump-control h2,
 .detail-page .auto-pump-control h2,
 .detail-page .water-level-detail h2 {
-    font-size: 20px !important;
-    margin: 0 0 15px 0 !important;
-    padding-bottom: 8px !important;
+    font-size: 22px !important;
+    margin: 0 0 16px 0 !important;
+    padding-bottom: 10px !important;
     color: #003087;
-    border-bottom: 2px solid #003087;
+    border-bottom: 3px solid #003087;
+    font-weight: 700;
 }
 
 /* Pump Display - Match with index.html */
@@ -2033,9 +2036,9 @@ header h1 {
 
 /* Auto-pump section - Match index.html */
 .detail-page .auto-pump-info > p {
-    font-size: 14px !important;
-    margin-bottom: 10px !important;
-    line-height: 1.5 !important;
+    font-size: 16px !important;
+    margin-bottom: 12px !important;
+    line-height: 1.6 !important;
     color: #666 !important;
 }
 
@@ -2052,8 +2055,28 @@ header h1 {
     box-shadow: 0 2px 8px rgba(0, 48, 135, 0.1);
 }
 
-.detail-page .auto-pump-toggle-container strong {
-    font-size: 15px !important;
+/* Auto-pump header layout */
+.detail-page .auto-pump-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.detail-page .auto-pump-title-section {
+    flex: 1;
+}
+
+.detail-page .auto-pump-title {
+    color: #003087;
+    font-size: 17px !important;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.detail-page .auto-pump-status-text {
+    font-size: 14px !important;
+    color: #666;
+    margin-top: 5px;
 }
 
 .detail-page .auto-pump-toggle-container .toggle-switch {
@@ -2083,17 +2106,41 @@ header h1 {
 
 .detail-page .auto-pump-details {
     margin-top: 10px !important;
-    padding: 12px !important;
-    font-size: 13px !important;
+    padding: 14px !important;
+    font-size: 14px !important;
     background: #f8f9fa !important;
     border-radius: 6px !important;
 }
 
+/* Auto-pump levels grid */
+.detail-page .auto-pump-levels-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.detail-page .level-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.detail-page .level-label {
+    color: #666;
+    font-size: 14px;
+}
+
+.detail-page .level-value {
+    color: #003087;
+    font-size: 16px;
+    margin-left: 5px;
+}
+
 .detail-page .safety-notice {
     margin-top: 10px !important;
-    padding: 12px !important;
-    font-size: 13px !important;
-    line-height: 1.5 !important;
+    padding: 14px !important;
+    font-size: 15px !important;
+    line-height: 1.6 !important;
     background: #fff3cd !important;
     border-left: 4px solid #ffc107 !important;
     border-radius: 4px !important;
@@ -2122,14 +2169,14 @@ header h1 {
 }
 
 .detail-page .level-info p {
-    font-size: 16px !important;
+    font-size: 18px !important;
     margin-bottom: 0 !important;
     color: #333;
-    font-weight: 500;
+    font-weight: 600;
 }
 
 .detail-page .level-info span {
-    font-size: 22px !important;
+    font-size: 26px !important;
     font-weight: 700;
 }
 
@@ -2142,8 +2189,8 @@ header h1 {
 }
 
 .detail-page .level-status {
-    padding: 10px 15px !important;
-    font-size: 18px !important;
+    padding: 12px 18px !important;
+    font-size: 20px !important;
     border-radius: 8px;
     font-weight: 700;
     text-align: center;
@@ -2151,14 +2198,14 @@ header h1 {
 
 /* Legend - Match with index.html */
 .detail-page .level-scale {
-    width: 45px;
-    font-size: 12px;
+    width: 50px;
+    font-size: 14px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     color: #003087;
     font-weight: 700;
-    padding-right: 5px;
+    padding-right: 8px;
 }
 
 .detail-page .level-fill-large {
