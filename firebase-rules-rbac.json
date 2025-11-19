@@ -1,0 +1,211 @@
+{
+  "rules": {
+    // Default: Deny all access
+    ".read": false,
+    ".write": false,
+
+    // Area 1 - Role-based access
+    "area1": {
+      // Read: Only authenticated users (admin or regular user)
+      ".read": "auth != null",
+
+      // Sensor data - Only ESP32 (custom claim) can write
+      "waterLevel": {
+        ".write": "auth != null && (auth.token.role == 'esp32' || auth.token.admin == true)",
+        ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 10"
+      },
+      "waterHeight": {
+        ".write": "auth != null && (auth.token.role == 'esp32' || auth.token.admin == true)",
+        ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 200"
+      },
+      "pumpStatus": {
+        ".write": "auth != null && (auth.token.role == 'esp32' || auth.token.admin == true)",
+        ".validate": "newData.isBoolean()"
+      },
+      "current": {
+        ".write": "auth != null && (auth.token.role == 'esp32' || auth.token.admin == true)",
+        ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 100"
+      },
+      "online": {
+        ".write": "auth != null && (auth.token.role == 'esp32' || auth.token.admin == true)",
+        ".validate": "newData.isBoolean()"
+      },
+      "timestamp": {
+        ".write": "auth != null && (auth.token.role == 'esp32' || auth.token.admin == true)",
+        ".validate": "newData.isString()"
+      },
+      "servoPosition": {
+        ".write": "auth != null && (auth.token.role == 'esp32' || auth.token.admin == true)",
+        ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 180"
+      },
+      "servoState": {
+        ".write": "auth != null && (auth.token.role == 'esp32' || auth.token.admin == true)",
+        ".validate": "newData.isString() && (newData.val() == 'open' || newData.val() == 'close' || newData.val() == 'auto')"
+      },
+      "firmwareVersion": {
+        ".write": "auth != null && (auth.token.role == 'esp32' || auth.token.admin == true)",
+        ".validate": "newData.isString()"
+      },
+
+      // Dashboard status - All authenticated users
+      "dashboardOnline": {
+        ".write": "auth != null",
+        ".validate": "newData.isBoolean()"
+      },
+      "dashboardTimestamp": {
+        ".write": "auth != null",
+        ".validate": "newData.isString()"
+      },
+
+      // Pump Command - Only authenticated users (admin and regular users can control pump)
+      "pumpCommand": {
+        ".write": "auth != null",
+        ".validate": "newData.isBoolean()"
+      },
+
+      // Device health - ESP32 write, all authenticated read
+      "deviceHealth": {
+        ".read": "auth != null",
+        ".write": "auth != null && (auth.token.role == 'esp32' || auth.token.admin == true)",
+        ".validate": "newData.hasChildren(['rssi', 'freeHeap', 'uptime'])",
+        "rssi": {
+          ".validate": "newData.isNumber() && newData.val() >= -100 && newData.val() <= 0"
+        },
+        "freeHeap": {
+          ".validate": "newData.isNumber() && newData.val() >= 0"
+        },
+        "uptime": {
+          ".validate": "newData.isNumber() && newData.val() >= 0"
+        }
+      }
+    },
+
+    // Area 2 - Same security as Area 1
+    "area2": {
+      ".read": "auth != null",
+
+      "waterLevel": {
+        ".write": "auth != null && (auth.token.role == 'esp32' || auth.token.admin == true)",
+        ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 10"
+      },
+      "waterHeight": {
+        ".write": "auth != null && (auth.token.role == 'esp32' || auth.token.admin == true)",
+        ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 50"
+      },
+      "pumpStatus": {
+        ".write": "auth != null && (auth.token.role == 'esp32' || auth.token.admin == true)",
+        ".validate": "newData.isBoolean()"
+      },
+      "current": {
+        ".write": "auth != null && (auth.token.role == 'esp32' || auth.token.admin == true)",
+        ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 100"
+      },
+      "online": {
+        ".write": "auth != null && (auth.token.role == 'esp32' || auth.token.admin == true)",
+        ".validate": "newData.isBoolean()"
+      },
+      "timestamp": {
+        ".write": "auth != null && (auth.token.role == 'esp32' || auth.token.admin == true)",
+        ".validate": "newData.isString()"
+      },
+      "firmwareVersion": {
+        ".write": "auth != null && (auth.token.role == 'esp32' || auth.token.admin == true)",
+        ".validate": "newData.isString()"
+      },
+      "dashboardOnline": {
+        ".write": "auth != null",
+        ".validate": "newData.isBoolean()"
+      },
+      "dashboardTimestamp": {
+        ".write": "auth != null",
+        ".validate": "newData.isString()"
+      },
+      "pumpCommand": {
+        ".write": "auth != null",
+        ".validate": "newData.isBoolean()"
+      },
+      "deviceHealth": {
+        ".read": "auth != null",
+        ".write": "auth != null && (auth.token.role == 'esp32' || auth.token.admin == true)",
+        ".validate": "newData.hasChildren(['rssi', 'freeHeap', 'uptime'])",
+        "rssi": {
+          ".validate": "newData.isNumber() && newData.val() >= -100 && newData.val() <= 0"
+        },
+        "freeHeap": {
+          ".validate": "newData.isNumber() && newData.val() >= 0"
+        },
+        "uptime": {
+          ".validate": "newData.isNumber() && newData.val() >= 0"
+        }
+      }
+    },
+
+    // Config - ONLY ADMIN can modify
+    "config": {
+      ".read": "auth != null",
+
+      "autoPump": {
+        "area1": {
+          // Only admin can write config
+          ".write": "auth != null && auth.token.admin == true",
+          ".validate": "newData.hasChildren(['enabled', 'activateLevel', 'deactivateLevel'])",
+          "enabled": {
+            ".validate": "newData.isBoolean()"
+          },
+          "activateLevel": {
+            ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 10"
+          },
+          "deactivateLevel": {
+            ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 10"
+          }
+        },
+        "area2": {
+          ".write": "auth != null && auth.token.admin == true",
+          ".validate": "newData.hasChildren(['enabled', 'activateLevel', 'deactivateLevel'])",
+          "enabled": {
+            ".validate": "newData.isBoolean()"
+          },
+          "activateLevel": {
+            ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 10"
+          },
+          "deactivateLevel": {
+            ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 10"
+          }
+        }
+      }
+    },
+
+    // Alarm logs - All authenticated can read, only ESP32 and admin can write
+    "alarms": {
+      ".read": "auth != null",
+      ".write": "auth != null && (auth.token.role == 'esp32' || auth.token.admin == true)",
+      ".indexOn": ["timestamp", "area", "level"]
+    },
+
+    // User presence tracking
+    "presence": {
+      ".read": "auth != null",
+      "$uid": {
+        ".write": "auth != null && auth.uid == $uid"
+      }
+    },
+
+    // User roles - Only admin can read/write
+    "userRoles": {
+      ".read": "auth != null && auth.token.admin == true",
+      ".write": "auth != null && auth.token.admin == true",
+      "$uid": {
+        ".validate": "newData.hasChildren(['email', 'role', 'createdAt'])",
+        "email": {
+          ".validate": "newData.isString()"
+        },
+        "role": {
+          ".validate": "newData.isString() && (newData.val() == 'admin' || newData.val() == 'user' || newData.val() == 'esp32')"
+        },
+        "createdAt": {
+          ".validate": "newData.isString()"
+        }
+      }
+    }
+  }
+}
