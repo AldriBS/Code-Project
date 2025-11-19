@@ -595,18 +595,34 @@ async function togglePump(area) {
         if (area1ControlTimeout) clearTimeout(area1ControlTimeout);
         area1ControlTimeout = setTimeout(() => {
             console.warn('⚠️ Area 1: Timeout waiting ESP32 confirmation');
+
+            // ✅ REVERT TOGGLE - Pompa tidak merespons
+            const toggle1 = document.getElementById('pumpToggle1');
+            if (toggle1) {
+                toggle1.checked = !command;  // Kembalikan ke posisi semula
+                console.log(`🔄 Toggle reverted to: ${toggle1.checked ? 'ON' : 'OFF'}`);
+            }
+
             isUserControllingArea1 = false;
             area1ControlTimeout = null;
-            showNotification('Area 1: Response timeout', 'warning');
+            showNotification('Area 1: Pompa tidak merespons - Toggle dikembalikan', 'warning');
         }, 10000);
     } else {
         isUserControllingArea2 = true;
         if (area2ControlTimeout) clearTimeout(area2ControlTimeout);
         area2ControlTimeout = setTimeout(() => {
             console.warn('⚠️ Area 2: Timeout waiting ESP32 confirmation');
+
+            // ✅ REVERT TOGGLE - Pompa tidak merespons
+            const toggle2 = document.getElementById('pumpToggle2');
+            if (toggle2) {
+                toggle2.checked = !command;  // Kembalikan ke posisi semula
+                console.log(`🔄 Toggle reverted to: ${toggle2.checked ? 'ON' : 'OFF'}`);
+            }
+
             isUserControllingArea2 = false;
             area2ControlTimeout = null;
-            showNotification('Area 2: Response timeout', 'warning');
+            showNotification('Area 2: Pompa tidak merespons - Toggle dikembalikan', 'warning');
         }, 10000);
     }
 
