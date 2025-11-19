@@ -1,15 +1,20 @@
 /*
  * =====================================================================
- * KOMATSU HYDRAULIC PLANT - WEB DASHBOARD SCRIPT v3.0
+ * KOMATSU HYDRAULIC PLANT - WEB DASHBOARD SCRIPT v3.1
  * Firebase Real-time Database Integration
- * 
- * NEW in v3.0:
+ *
+ * NEW in v3.1:
+ * - 🔒 ULTRA SECURITY: Integrated securePumpControl() wrapper
+ * - 🔒 All pump commands now pass through security layer
+ * - 🔒 Authentication, CSRF, rate limiting, audit logging
+ *
+ * v3.0 features:
  * - ✅ Sensor timeout detection (30s) - auto reset to 0
  * - ✅ Auto-pump activation system
  * - ✅ Configurable water level thresholds
  * - ✅ Alarm system integration
  * - ✅ Real-time sensor online/offline status
- * 
+ *
  * Previous v2.1 features:
  * - FIX: Race condition pada toggle pump
  * - User Control Lock
@@ -575,24 +580,15 @@ function removeSensorOfflineWarningDetail(area) {
 }
 
 // ==================== PUMP CONTROL ====================
-function togglePump(area) {
+async function togglePump(area) {
     const toggle = document.getElementById('pumpToggle' + area);
     if (!toggle) return;
-    
+
     const command = toggle.checked;
     const areaKey = 'area' + area;
 
     console.log(`🎛️ Manual pump command for ${areaKey}: ${command ? 'ON' : 'OFF'}`);
 
-    const ref = window.firebaseRefs[areaKey];
-    
-    if (!ref) {
-        console.error('Firebase reference not available');
-        showNotification('Connection error', 'error');
-        toggle.checked = !command;
-        return;
-    }
-    
     // Activate user control lock
     if (area === 1) {
         isUserControllingArea1 = true;
@@ -613,19 +609,23 @@ function togglePump(area) {
             showNotification('Area 2: Response timeout', 'warning');
         }, 10000);
     }
-    
+
     showNotification(`${areaKey}: Sending command...`, 'info');
-    
-    ref.update({
-        pumpCommand: command
-    }).then(() => {
-        console.log('✅ Command sent successfully');
+
+    // ✅ USE SECURE PUMP CONTROL WRAPPER
+    // This provides: Authentication, CSRF protection, Rate limiting,
+    // Blocked user check, Audit logging, Input validation
+    const success = await securePumpControl(area, command);
+
+    if (success) {
+        console.log('✅ Command sent successfully (security verified)');
         const action = command ? 'starting' : 'stopping';
         showNotification(`${areaKey}: Pump ${action}`, 'success');
-    }).catch((error) => {
-        console.error('❌ Failed to send command:', error);
-        toggle.checked = !command;
-        
+    } else {
+        console.error('❌ Failed to send command or security check failed');
+        toggle.checked = !command; // Revert toggle
+
+        // Clear user control lock
         if (area === 1) {
             isUserControllingArea1 = false;
             if (area1ControlTimeout) {
@@ -639,9 +639,9 @@ function togglePump(area) {
                 area2ControlTimeout = null;
             }
         }
-        
-        showNotification(`${areaKey}: Failed to send command`, 'error');
-    });
+
+        showNotification(`${areaKey}: Security check failed or command error`, 'error');
+    }
 }
 
 // ==================== NAVIGATION ====================
@@ -731,8 +731,8 @@ document.head.appendChild(style);
 
 // ==================== INITIALIZE ON PAGE LOAD ====================
 window.addEventListener('load', async () => {
-    console.log('Initializing KOMATSU Flood Control Dashboard v3.0...');
-    console.log('🔧 NEW: Sensor timeout + Auto-pump + Alarm system');
+    console.log('Initializing KOMATSU Flood Control Dashboard v3.1...');
+    console.log('🔒 NEW: Ultra Security Layer + CSRF + Rate Limiting');
     
     // Load config first
     await loadConfig();
@@ -767,5 +767,5 @@ connectionRef.on('value', (snapshot) => {
     }
 });
 
-console.log('✅ Script loaded - KOMATSU Flood Control System v3.0');
-console.log('✅ Features: Sensor Timeout | Auto-Pump | Alarm System');
+console.log('✅ Script loaded - KOMATSU Flood Control System v3.1');
+console.log('✅ Features: Ultra Security | Sensor Timeout | Auto-Pump | Alarm System');
