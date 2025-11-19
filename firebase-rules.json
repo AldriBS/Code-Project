@@ -1,0 +1,192 @@
+{
+  "rules": {
+    // Default: Require authentication
+    ".read": false,
+    ".write": false,
+
+    // Area 1 - Secured with authentication
+    "area1": {
+      // Read: Only authenticated users
+      ".read": "auth != null",
+
+      // Sensor data - Only IoT device can write
+      "waterLevel": {
+        ".write": "auth != null",
+        ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 10"
+      },
+      "waterHeight": {
+        ".write": "auth != null",
+        ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 200"
+      },
+      "pumpStatus": {
+        ".write": "auth != null",
+        ".validate": "newData.isBoolean()"
+      },
+      "current": {
+        ".write": "auth != null",
+        ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 100"
+      },
+      "online": {
+        ".write": "auth != null",
+        ".validate": "newData.isBoolean()"
+      },
+      "timestamp": {
+        ".write": "auth != null",
+        ".validate": "newData.isString()"
+      },
+      "servoPosition": {
+        ".write": "auth != null",
+        ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 180"
+      },
+      "servoState": {
+        ".write": "auth != null",
+        ".validate": "newData.isString() && (newData.val() == 'open' || newData.val() == 'close' || newData.val() == 'auto')"
+      },
+      "firmwareVersion": {
+        ".write": "auth != null",
+        ".validate": "newData.isString()"
+      },
+
+      // Dashboard status - Only dashboard can write
+      "dashboardOnline": {
+        ".write": "auth != null",
+        ".validate": "newData.isBoolean()"
+      },
+      "dashboardTimestamp": {
+        ".write": "auth != null",
+        ".validate": "newData.isString()"
+      },
+
+      // Command from dashboard to device - Only dashboard can write
+      "pumpCommand": {
+        ".write": "auth != null",
+        ".validate": "newData.isBoolean()"
+      },
+
+      // Device health - Authenticated read/write
+      "deviceHealth": {
+        ".read": "auth != null",
+        ".write": "auth != null",
+        ".validate": "newData.hasChildren(['rssi', 'freeHeap', 'uptime'])",
+        "rssi": {
+          ".validate": "newData.isNumber() && newData.val() >= -100 && newData.val() <= 0"
+        },
+        "freeHeap": {
+          ".validate": "newData.isNumber() && newData.val() >= 0"
+        },
+        "uptime": {
+          ".validate": "newData.isNumber() && newData.val() >= 0"
+        }
+      }
+    },
+
+    // Area 2 - Same security as Area 1
+    "area2": {
+      ".read": "auth != null",
+
+      "waterLevel": {
+        ".write": "auth != null",
+        ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 10"
+      },
+      "waterHeight": {
+        ".write": "auth != null",
+        ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 50"
+      },
+      "pumpStatus": {
+        ".write": "auth != null",
+        ".validate": "newData.isBoolean()"
+      },
+      "current": {
+        ".write": "auth != null",
+        ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 100"
+      },
+      "online": {
+        ".write": "auth != null",
+        ".validate": "newData.isBoolean()"
+      },
+      "timestamp": {
+        ".write": "auth != null",
+        ".validate": "newData.isString()"
+      },
+      "firmwareVersion": {
+        ".write": "auth != null",
+        ".validate": "newData.isString()"
+      },
+      "dashboardOnline": {
+        ".write": "auth != null",
+        ".validate": "newData.isBoolean()"
+      },
+      "dashboardTimestamp": {
+        ".write": "auth != null",
+        ".validate": "newData.isString()"
+      },
+      "pumpCommand": {
+        ".write": "auth != null",
+        ".validate": "newData.isBoolean()"
+      },
+      "deviceHealth": {
+        ".read": "auth != null",
+        ".write": "auth != null",
+        ".validate": "newData.hasChildren(['rssi', 'freeHeap', 'uptime'])",
+        "rssi": {
+          ".validate": "newData.isNumber() && newData.val() >= -100 && newData.val() <= 0"
+        },
+        "freeHeap": {
+          ".validate": "newData.isNumber() && newData.val() >= 0"
+        },
+        "uptime": {
+          ".validate": "newData.isNumber() && newData.val() >= 0"
+        }
+      }
+    },
+
+    // Config - Auto-Pump Settings
+    "config": {
+      ".read": "auth != null",
+
+      "autoPump": {
+        "area1": {
+          ".write": "auth != null",
+          ".validate": "newData.hasChildren(['enabled', 'activateLevel', 'deactivateLevel'])",
+          "enabled": {
+            ".validate": "newData.isBoolean()"
+          },
+          "activateLevel": {
+            ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 10"
+          },
+          "deactivateLevel": {
+            ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 10"
+          }
+        },
+        "area2": {
+          ".write": "auth != null",
+          ".validate": "newData.hasChildren(['enabled', 'activateLevel', 'deactivateLevel'])",
+          "enabled": {
+            ".validate": "newData.isBoolean()"
+          },
+          "activateLevel": {
+            ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 10"
+          },
+          "deactivateLevel": {
+            ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 10"
+          }
+        }
+      }
+    },
+
+    // Alarm logs - Write only, read for authenticated users
+    "alarms": {
+      ".read": "auth != null",
+      ".write": "auth != null",
+      ".indexOn": ["timestamp", "area", "level"]
+    },
+
+    // User presence tracking
+    "presence": {
+      ".read": "auth != null",
+      "$uid": {
+        ".write": "auth != null && auth.uid == $uid"
+      }
+    }
+  }
+}

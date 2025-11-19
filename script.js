@@ -1,15 +1,20 @@
 /*
  * =====================================================================
- * KOMATSU HYDRAULIC PLANT - WEB DASHBOARD SCRIPT v3.0
+ * KOMATSU HYDRAULIC PLANT - WEB DASHBOARD SCRIPT v3.1
  * Firebase Real-time Database Integration
- * 
- * NEW in v3.0:
+ *
+ * NEW in v3.1:
+ * - 🔒 ULTRA SECURITY: Integrated securePumpControl() wrapper
+ * - 🔒 All pump commands now pass through security layer
+ * - 🔒 Authentication, CSRF, rate limiting, audit logging
+ *
+ * v3.0 features:
  * - ✅ Sensor timeout detection (30s) - auto reset to 0
  * - ✅ Auto-pump activation system
  * - ✅ Configurable water level thresholds
  * - ✅ Alarm system integration
  * - ✅ Real-time sensor online/offline status
- * 
+ *
  * Previous v2.1 features:
  * - FIX: Race condition pada toggle pump
  * - User Control Lock
@@ -151,11 +156,11 @@ function startSensorTimeoutChecker(area) {
 function showSensorOfflineIndicator(area) {
     const areaNum = area === 'area1' ? 1 : 2;
     const indicatorId = `sensor-offline-${areaNum}`;
-    
+
     // Remove existing indicator
     const existing = document.getElementById(indicatorId);
     if (existing) existing.remove();
-    
+
     // Create indicator
     const indicator = document.createElement('div');
     indicator.id = indicatorId;
@@ -171,17 +176,26 @@ function showSensorOfflineIndicator(area) {
         z-index: 9998;
         font-weight: 600;
         animation: pulse 2s infinite;
+        display: flex;
+        align-items: center;
+        gap: 10px;
     `;
-    indicator.innerHTML = `
-        ⚠️ Area ${areaNum} Sensor OFFLINE
-        <button onclick="document.getElementById('${indicatorId}').remove()" 
-                style="background: none; border: 2px solid white; color: white; 
-                       padding: 5px 10px; margin-left: 10px; border-radius: 5px; 
-                       cursor: pointer; font-weight: 600;">
-            ✕
-        </button>
-    `;
-    
+
+    // Create text node
+    const text = document.createTextNode(`⚠️ Area ${areaNum} Sensor OFFLINE`);
+
+    // Create close button
+    const closeBtn = document.createElement('button');
+    closeBtn.textContent = '✕';
+    closeBtn.style.cssText = 'background: none; border: 2px solid white; color: white; padding: 5px 10px; margin-left: 10px; border-radius: 5px; cursor: pointer; font-weight: 600;';
+    closeBtn.onclick = function() {
+        document.getElementById(indicatorId).remove();
+    };
+
+    // Append elements
+    indicator.appendChild(text);
+    indicator.appendChild(closeBtn);
+
     document.body.appendChild(indicator);
 }
 
@@ -575,57 +589,68 @@ function removeSensorOfflineWarningDetail(area) {
 }
 
 // ==================== PUMP CONTROL ====================
-function togglePump(area) {
+async function togglePump(area) {
     const toggle = document.getElementById('pumpToggle' + area);
     if (!toggle) return;
-    
+
     const command = toggle.checked;
     const areaKey = 'area' + area;
 
     console.log(`🎛️ Manual pump command for ${areaKey}: ${command ? 'ON' : 'OFF'}`);
 
-    const ref = window.firebaseRefs[areaKey];
-    
-    if (!ref) {
-        console.error('Firebase reference not available');
-        showNotification('Connection error', 'error');
-        toggle.checked = !command;
-        return;
-    }
-    
     // Activate user control lock
     if (area === 1) {
         isUserControllingArea1 = true;
         if (area1ControlTimeout) clearTimeout(area1ControlTimeout);
         area1ControlTimeout = setTimeout(() => {
             console.warn('⚠️ Area 1: Timeout waiting ESP32 confirmation');
+
+            // ✅ REVERT TOGGLE - Pompa tidak merespons
+            const toggle1 = document.getElementById('pumpToggle1');
+            if (toggle1) {
+                toggle1.checked = !command;  // Kembalikan ke posisi semula
+                console.log(`🔄 Toggle reverted to: ${toggle1.checked ? 'ON' : 'OFF'}`);
+            }
+
             isUserControllingArea1 = false;
             area1ControlTimeout = null;
-            showNotification('Area 1: Response timeout', 'warning');
+            showNotification('Area 1: Pompa tidak merespons - Toggle dikembalikan', 'warning');
         }, 10000);
     } else {
         isUserControllingArea2 = true;
         if (area2ControlTimeout) clearTimeout(area2ControlTimeout);
         area2ControlTimeout = setTimeout(() => {
             console.warn('⚠️ Area 2: Timeout waiting ESP32 confirmation');
+
+            // ✅ REVERT TOGGLE - Pompa tidak merespons
+            const toggle2 = document.getElementById('pumpToggle2');
+            if (toggle2) {
+                toggle2.checked = !command;  // Kembalikan ke posisi semula
+                console.log(`🔄 Toggle reverted to: ${toggle2.checked ? 'ON' : 'OFF'}`);
+            }
+
             isUserControllingArea2 = false;
             area2ControlTimeout = null;
-            showNotification('Area 2: Response timeout', 'warning');
+            showNotification('Area 2: Pompa tidak merespons - Toggle dikembalikan', 'warning');
         }, 10000);
     }
-    
+
     showNotification(`${areaKey}: Sending command...`, 'info');
-    
-    ref.update({
-        pumpCommand: command
-    }).then(() => {
-        console.log('✅ Command sent successfully');
+
+    // ✅ USE SECURE PUMP CONTROL WRAPPER
+    // This provides: Authentication, CSRF protection, Rate limiting,
+    // Blocked user check, Audit logging, Input validation
+    const success = await securePumpControl(area, command);
+
+    if (success) {
+        console.log('✅ Command sent successfully (security verified)');
         const action = command ? 'starting' : 'stopping';
         showNotification(`${areaKey}: Pump ${action}`, 'success');
-    }).catch((error) => {
-        console.error('❌ Failed to send command:', error);
-        toggle.checked = !command;
-        
+    } else {
+        console.error('❌ Failed to send command or security check failed');
+        toggle.checked = !command; // Revert toggle
+
+        // Clear user control lock
         if (area === 1) {
             isUserControllingArea1 = false;
             if (area1ControlTimeout) {
@@ -639,9 +664,9 @@ function togglePump(area) {
                 area2ControlTimeout = null;
             }
         }
-        
-        showNotification(`${areaKey}: Failed to send command`, 'error');
-    });
+
+        showNotification(`${areaKey}: Security check failed or command error`, 'error');
+    }
 }
 
 // ==================== NAVIGATION ====================
@@ -731,8 +756,8 @@ document.head.appendChild(style);
 
 // ==================== INITIALIZE ON PAGE LOAD ====================
 window.addEventListener('load', async () => {
-    console.log('Initializing KOMATSU Flood Control Dashboard v3.0...');
-    console.log('🔧 NEW: Sensor timeout + Auto-pump + Alarm system');
+    console.log('Initializing KOMATSU Flood Control Dashboard v3.1...');
+    console.log('🔒 NEW: Ultra Security Layer + CSRF + Rate Limiting');
     
     // Load config first
     await loadConfig();
@@ -767,5 +792,5 @@ connectionRef.on('value', (snapshot) => {
     }
 });
 
-console.log('✅ Script loaded - KOMATSU Flood Control System v3.0');
-console.log('✅ Features: Sensor Timeout | Auto-Pump | Alarm System');
+console.log('✅ Script loaded - KOMATSU Flood Control System v3.1');
+console.log('✅ Features: Ultra Security | Sensor Timeout | Auto-Pump | Alarm System');

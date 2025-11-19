@@ -1055,9 +1055,11 @@ header h1 {
     bottom: 0;
     left: 0;
     right: 0;
-    height: var(--fill-height, 0%);  /* Ã¢Å“â€¦ GUNAKAN CSS VARIABLE */
-    transition: all 0.5s ease;
+    height: var(--fill-height, 0%);
+    transition: height 0.8s ease-out, background 0.4s ease;  /* Smooth animation */
+    background-size: 200% 200%;  /* For gradient animation */
     z-index: 2;
+    border-radius: 0 0 8px 8px;  /* Rounded bottom corners */
 }
 
 /* Water Level Colors for Large Bar - 3 STAGES ONLY */
@@ -1069,6 +1071,7 @@ header h1 {
 .level-fill-large.level-4::after,
 .level-fill-large.level-5::after {
     background: linear-gradient(180deg, #2ecc71 0%, #27ae60 100%);
+    animation: waterWave 3s ease-in-out infinite;  /* Subtle animation for normal level */
 }
 
 /* KUNING: Level 6-7 (WARNING) */
@@ -1857,3 +1860,382 @@ header h1 {
 .detail-content {
     animation: fadeIn 0.5s ease-out;
 }
+
+/* ======================================================
+   AREA 1 - OPTIMIZED COMPACT LAYOUT
+   CSS khusus untuk halaman detail Area 1
+   ====================================================== */
+
+/* AREA 1 - OPTIMIZED COMPACT LAYOUT */
+/* Fit sempurna dalam 1 viewport tanpa scroll */
+
+.detail-page .detail-content {
+    padding: 15px !important;
+    gap: 15px !important;
+    height: calc(100vh - 80px) !important;
+    max-height: calc(100vh - 80px) !important;
+    overflow: hidden !important;
+    display: flex !important;
+}
+
+/* Left Section - Image + Info */
+.detail-page .area-image {
+    flex: 1 !important;
+    padding: 0 !important;
+    max-height: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: #f5f5f5;
+    border-radius: 10px;
+    border-left: 4px solid #003087;
+    box-shadow: 0 4px 12px rgba(0, 48, 135, 0.1);
+}
+
+.detail-page .image-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.detail-page .image-container img {
+    max-height: 100% !important;
+    max-width: 100% !important;
+    width: auto !important;
+    height: auto !important;
+    object-fit: contain !important;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.detail-page .area-info-box {
+    background: linear-gradient(135deg, #003087 0%, #0056b3 100%);
+    color: white;
+    padding: 18px;
+    border-radius: 8px;
+    font-size: 15px;
+    line-height: 1.6;
+    margin-bottom: 18px;
+    box-shadow: 0 2px 8px rgba(0, 48, 135, 0.2);
+}
+
+.detail-page .area-info-box h3 {
+    margin: 0 0 12px 0;
+    font-size: 19px;
+    font-weight: 700;
+    border-bottom: 2px solid rgba(255,255,255,0.3);
+    padding-bottom: 8px;
+}
+
+.detail-page .info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    margin-top: 8px;
+}
+
+.detail-page .info-item {
+    background: rgba(255,255,255,0.1);
+    padding: 9px 12px;
+    border-radius: 5px;
+}
+
+.detail-page .info-item strong {
+    display: block;
+    font-size: 15px;
+    margin-bottom: 4px;
+    font-weight: 600;
+}
+
+/* Control Panel - Match index.html */
+.detail-page .control-panel {
+    width: 400px !important;
+    flex-shrink: 0 !important;
+    gap: 20px !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    max-height: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    padding-right: 5px !important;
+}
+
+/* Sections - Match index.html */
+.detail-page .pump-control,
+.detail-page .auto-pump-control,
+.detail-page .water-level-detail {
+    padding: 20px !important;
+    margin-top: 0 !important;
+    flex-shrink: 0 !important;
+    background: white;
+    border-radius: 10px;
+    border-left: 4px solid #003087;
+    box-shadow: 0 4px 12px rgba(0, 48, 135, 0.1);
+}
+
+/* Auto-pump has different border color */
+.detail-page .auto-pump-control {
+    border-left: 4px solid #0051a5;
+}
+
+/* Headers - Match index.html */
+.detail-page .pump-control h2,
+.detail-page .auto-pump-control h2,
+.detail-page .water-level-detail h2 {
+    font-size: 22px !important;
+    margin: 0 0 16px 0 !important;
+    padding-bottom: 10px !important;
+    color: #003087;
+    border-bottom: 3px solid #003087;
+    font-weight: 700;
+}
+
+/* Pump Display - Match with index.html */
+.detail-page .pump-display {
+    gap: 15px !important;
+    padding: 10px 0 !important;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.detail-page .large-pump {
+    width: 100px !important;
+    height: 100px !important;
+}
+
+/* Toggle Switch - Match index.html */
+.detail-page .toggle-switch {
+    width: 95px !important;
+    height: 48px !important;
+}
+
+.detail-page .toggle-slider:before {
+    height: 40px !important;
+    width: 40px !important;
+    left: 4px !important;
+    bottom: 4px !important;
+}
+
+.detail-page .toggle-switch input:checked + .toggle-slider:before {
+    transform: translateX(47px) !important;
+}
+
+.detail-page .toggle-slider:after {
+    font-size: 13px !important;
+    left: 15px !important;
+}
+
+.detail-page .toggle-switch input:checked + .toggle-slider:after {
+    left: auto !important;
+    right: 18px !important;
+}
+
+/* Auto-pump section - Match index.html */
+.detail-page .auto-pump-info > p {
+    font-size: 16px !important;
+    margin-bottom: 12px !important;
+    line-height: 1.6 !important;
+    color: #666 !important;
+}
+
+.detail-page .auto-pump-toggle-container {
+    padding: 12px !important;
+    background: #f8f9fa !important;
+    border-radius: 8px !important;
+    border: 2px solid #e8eef7 !important;
+    transition: all 0.3s;
+}
+
+.detail-page .auto-pump-toggle-container:hover {
+    border-color: #003087;
+    box-shadow: 0 2px 8px rgba(0, 48, 135, 0.1);
+}
+
+/* Auto-pump header layout */
+.detail-page .auto-pump-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.detail-page .auto-pump-title-section {
+    flex: 1;
+}
+
+.detail-page .auto-pump-title {
+    color: #003087;
+    font-size: 17px !important;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.detail-page .auto-pump-status-text {
+    font-size: 14px !important;
+    color: #666;
+    margin-top: 5px;
+}
+
+.detail-page .auto-pump-toggle-container .toggle-switch {
+    width: 65px !important;
+    height: 32px !important;
+}
+
+.detail-page .auto-pump-toggle-container .toggle-slider:before {
+    height: 26px !important;
+    width: 26px !important;
+    left: 3px !important;
+    bottom: 3px !important;
+}
+
+.detail-page .auto-pump-toggle-container .toggle-switch input:checked + .toggle-slider:before {
+    transform: translateX(33px) !important;
+}
+
+.detail-page .auto-pump-toggle-container .toggle-slider:after {
+    font-size: 10px !important;
+    left: 11px !important;
+}
+
+.detail-page .auto-pump-toggle-container .toggle-switch input:checked + .toggle-slider:after {
+    right: 13px !important;
+}
+
+.detail-page .auto-pump-details {
+    margin-top: 10px !important;
+    padding: 14px !important;
+    font-size: 14px !important;
+    background: #f8f9fa !important;
+    border-radius: 6px !important;
+}
+
+/* Auto-pump levels grid */
+.detail-page .auto-pump-levels-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.detail-page .level-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.detail-page .level-label {
+    color: #666;
+    font-size: 14px;
+}
+
+.detail-page .level-value {
+    color: #003087;
+    font-size: 16px;
+    margin-left: 5px;
+}
+
+.detail-page .safety-notice {
+    margin-top: 10px !important;
+    padding: 14px !important;
+    font-size: 15px !important;
+    line-height: 1.6 !important;
+    background: #fff3cd !important;
+    border-left: 4px solid #ffc107 !important;
+    border-radius: 4px !important;
+    color: #856404 !important;
+}
+
+/* Water Level Display - Larger width for better visibility */
+.detail-page .level-bar-large {
+    height: 220px !important;
+    width: 100px !important;  /* Increased from 70px to 100px */
+    display: flex;
+    gap: 15px;  /* Increased gap */
+}
+
+.detail-page .level-display {
+    gap: 20px !important;
+    display: flex;
+    align-items: center;
+}
+
+.detail-page .level-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.detail-page .level-info p {
+    font-size: 18px !important;
+    margin-bottom: 0 !important;
+    color: #333;
+    font-weight: 600;
+}
+
+.detail-page .level-info span {
+    font-size: 26px !important;
+    font-weight: 700;
+}
+
+.detail-page .level-value span {
+    color: #003087;
+}
+
+.detail-page .level-cm span {
+    color: #0051a5;
+}
+
+.detail-page .level-status {
+    padding: 12px 18px !important;
+    font-size: 20px !important;
+    border-radius: 8px;
+    font-weight: 700;
+    text-align: center;
+}
+
+/* Legend - Match with index.html */
+.detail-page .level-scale {
+    width: 50px;
+    font-size: 14px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    color: #003087;
+    font-weight: 700;
+    padding-right: 8px;
+}
+
+.detail-page .level-fill-large {
+    width: 100px;  /* Increased from 70px to 100px */
+    border: 4px solid #003087;  /* Thicker border for better visibility */
+    border-radius: 12px;
+    position: relative;
+    overflow: hidden;
+    background: #f8f9fa;
+    height: 100%;  /* Ensure full height */
+}
+
+/* Scrollbar custom */
+.detail-page .control-panel::-webkit-scrollbar {
+    width: 4px;
+}
+
+.detail-page .control-panel::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.detail-page .control-panel::-webkit-scrollbar-thumb {
+    background: #003087;
+    border-radius: 2px;
+}
+
+/* ======================================================
+   AREA 2 - MATCH AREA 1 LAYOUT
+   CSS khusus untuk halaman detail Area 2
+   ====================================================== */
+
+/* Area 2 uses same styles as Area 1 - no additional CSS needed */
+/* All .detail-page styles from Area 1 section apply to Area 2 as well */

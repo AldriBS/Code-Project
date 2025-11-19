@@ -5,240 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pump Area 2 - Trafo Room Water Pit</title>
     <link rel="stylesheet" href="style.css">
-    <style>
-        /* AREA 2 - INTEGRATED AUTO-PUMP LAYOUT */
-        /* Fit 100% zoom - No scroll - Optimized */
-        
-        .detail-page .detail-content {
-            padding: 8px !important;
-            gap: 8px !important;
-            height: calc(100vh - 78px) !important;
-            max-height: calc(100vh - 78px) !important;
-            overflow: hidden !important;
-            display: flex !important;
-        }
-        
-        /* Area Image - Larger */
-        .detail-page .area-image {
-            flex: 0 0 45% !important;
-            padding: 5px !important;
-            max-height: 100% !important;
-            display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            overflow: hidden !important;
-        }
-        
-        .detail-page .area-image img {
-            max-height: 100% !important;
-            max-width: 100% !important;
-            width: auto !important;
-            height: auto !important;
-            object-fit: contain !important;
-        }
-        
-        /* Control Panel - Optimized */
-        .detail-page .control-panel {
-            flex: 1 1 55% !important;
-            gap: 8px !important;
-            overflow: hidden !important;
-            max-height: 100% !important;
-            display: flex !important;
-            flex-direction: column !important;
-        }
-        
-        /* Pump Control - INTEGRATED AUTO-PUMP */
-        .detail-page .pump-control {
-            padding: 10px !important;
-            flex-shrink: 0 !important;
-            background: white !important;
-            border-radius: 10px !important;
-            box-shadow: 0 4px 12px rgba(0, 48, 135, 0.1) !important;
-            border-left: 4px solid #003087 !important;
-        }
-        
-        .detail-page .pump-control h2 {
-            font-size: 17px !important;
-            margin-bottom: 8px !important;
-            padding-bottom: 6px !important;
-            color: #003087 !important;
-            border-bottom: 2px solid #003087 !important;
-        }
-        
-        /* Main Pump Display */
-        .detail-page .pump-display {
-            display: flex !important;
-            align-items: center !important;
-            justify-content: space-around !important;
-            gap: 12px !important;
-            padding: 8px 0 !important;
-            border-bottom: 1px solid #e8eef7 !important;
-            margin-bottom: 8px !important;
-        }
-        
-        .detail-page .large-pump {
-            width: 70px !important;
-            height: 70px !important;
-        }
-        
-        /* Main Toggle */
-        .detail-page .pump-display .toggle-switch {
-            width: 90px !important;
-            height: 45px !important;
-        }
-        
-        .detail-page .pump-display .toggle-slider:before {
-            height: 37px !important;
-            width: 37px !important;
-            left: 4px !important;
-            bottom: 4px !important;
-        }
-        
-        .detail-page .pump-display .toggle-switch input:checked + .toggle-slider:before {
-            transform: translateX(45px) !important;
-        }
-        
-        .detail-page .pump-display .toggle-slider:after {
-            font-size: 12px !important;
-            left: 14px !important;
-        }
-        
-        .detail-page .pump-display .toggle-switch input:checked + .toggle-slider:after {
-            left: auto !important;
-            right: 17px !important;
-        }
-        
-        /* Control Info */
-        .detail-page .control-info {
-            text-align: center !important;
-            font-size: 10px !important;
-            color: #666 !important;
-            margin-bottom: 8px !important;
-            padding-bottom: 8px !important;
-            border-bottom: 1px solid #e8eef7 !important;
-        }
-        
-        /* AUTO-PUMP INTEGRATED - Compact Design */
-        .detail-page .auto-pump-mini {
-            background: #f8f9fa !important;
-            border-radius: 6px !important;
-            padding: 8px !important;
-            border: 2px solid #e8eef7 !important;
-        }
-        
-        .detail-page .auto-pump-mini-header {
-            display: flex !important;
-            align-items: center !important;
-            justify-content: space-between !important;
-            margin-bottom: 6px !important;
-        }
-        
-        .detail-page .auto-pump-mini-header strong {
-            font-size: 13px !important;
-            color: #003087 !important;
-        }
-        
-        .detail-page .auto-pump-mini-header .toggle-switch {
-            width: 60px !important;
-            height: 28px !important;
-        }
-        
-        .detail-page .auto-pump-mini-header .toggle-slider:before {
-            height: 22px !important;
-            width: 22px !important;
-            left: 3px !important;
-            bottom: 3px !important;
-        }
-        
-        .detail-page .auto-pump-mini-header .toggle-switch input:checked + .toggle-slider:before {
-            transform: translateX(32px) !important;
-        }
-        
-        .detail-page .auto-pump-mini-header .toggle-slider:after {
-            font-size: 9px !important;
-            left: 10px !important;
-        }
-        
-        .detail-page .auto-pump-mini-header .toggle-switch input:checked + .toggle-slider:after {
-            right: 11px !important;
-        }
-        
-        .detail-page .auto-pump-status {
-            font-size: 10px !important;
-            color: #666 !important;
-            margin-bottom: 6px !important;
-        }
-        
-        .detail-page .auto-pump-levels {
-            display: flex !important;
-            justify-content: space-between !important;
-            font-size: 10px !important;
-            color: #666 !important;
-            padding: 4px 0 !important;
-        }
-        
-        .detail-page .auto-pump-levels strong {
-            color: #003087 !important;
-            margin-left: 3px !important;
-        }
-        
-        /* Water Level - LARGER NOW */
-        .detail-page .water-level-detail {
-            padding: 10px !important;
-            flex: 1 1 auto !important;
-            display: flex !important;
-            flex-direction: column !important;
-            min-height: 0 !important;
-            background: white !important;
-            border-radius: 10px !important;
-            box-shadow: 0 4px 12px rgba(0, 48, 135, 0.1) !important;
-            border-left: 4px solid #003087 !important;
-        }
-        
-        .detail-page .water-level-detail h2 {
-            font-size: 17px !important;
-            margin-bottom: 8px !important;
-            padding-bottom: 6px !important;
-            flex-shrink: 0 !important;
-            color: #003087 !important;
-            border-bottom: 2px solid #003087 !important;
-        }
-        
-        .detail-page .level-display {
-            display: flex !important;
-            gap: 10px !important;
-            flex: 1 1 auto !important;
-            min-height: 0 !important;
-            align-items: center !important;
-        }
-        
-        .detail-page .level-bar-large {
-            height: 100% !important;
-            max-height: 280px !important;
-            min-height: 200px !important;
-        }
-        
-        .detail-page .level-info {
-            display: flex !important;
-            flex-direction: column !important;
-            justify-content: center !important;
-            gap: 8px !important;
-        }
-        
-        .detail-page .level-info p {
-            font-size: 13px !important;
-            margin-bottom: 0 !important;
-        }
-        
-        .detail-page .level-info span {
-            font-size: 17px !important;
-        }
-        
-        .detail-page .level-status {
-            padding: 8px 10px !important;
-            font-size: 15px !important;
-        }
-    </style>
 </head>
 <body>
     <div class="container detail-page">
@@ -252,43 +18,86 @@
 
         <div class="detail-content">
             <div class="area-image">
-                <img src="Area_2_pic.png" alt="Pump Area 2">
+                <div class="image-container">
+                    <img src="Area_2_pic.png" alt="Pump Area 2">
+                </div>
             </div>
 
             <div class="control-panel">
-                <!-- PUMP CONTROL - WITH INTEGRATED AUTO-PUMP -->
                 <div class="pump-control">
                     <h2>Pump Control</h2>
-                    
-                    <!-- Main Pump Toggle -->
+
+                    <div class="area-info-box">
+                        <h3>📍 Area Information</h3>
+                        <div><strong>Location:</strong> Trafo Room Water Pit</div>
+                        <div style="margin-top: 6px;"><strong>Function:</strong> Secondary drainage system untuk area trafo dan electrical room</div>
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <strong>🔧 Pump Type</strong>
+                                <span>Submersible</span>
+                            </div>
+                            <div class="info-item">
+                                <strong>⚡ Control</strong>
+                                <span>Relay Contactor</span>
+                            </div>
+                            <div class="info-item">
+                                <strong>🎯 Auto Level</strong>
+                                <span>6-3 Scale</span>
+                            </div>
+                            <div class="info-item">
+                                <strong>⚠️ Critical</strong>
+                                <span>Level ≥ 8</span>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="pump-display">
                         <img src="waterpump.png" alt="Water Pump" class="large-pump">
-                        <label class="toggle-switch">
-                            <input type="checkbox" id="pumpToggle2" onchange="togglePump(2)">
-                            <span class="toggle-slider"></span>
-                        </label>
-                    </div>
-                    
-                    <!-- Control Type Info -->
-                    <div class="control-info">
-                        <strong>Control Type:</strong> Relay Contactor
-                    </div>
-                    
-                    <!-- AUTO-PUMP INTEGRATED -->
-                    <div class="auto-pump-mini">
-                        <div class="auto-pump-mini-header">
-                            <strong>⚙️ Auto-Pump</strong>
+                        <div class="control-button">
                             <label class="toggle-switch">
-                                <input type="checkbox" id="autoPumpToggle2" onchange="toggleAutoPump(2)">
+                                <input type="checkbox" id="pumpToggle2" onchange="togglePump(2)">
                                 <span class="toggle-slider"></span>
                             </label>
                         </div>
-                        <div class="auto-pump-status">
-                            <span id="autoPumpStatus2">Status: Loading...</span>
+                    </div>
+                </div>
+
+                <div class="auto-pump-control">
+                    <h2>⚙️ Auto-Pump Settings</h2>
+                    <div class="auto-pump-info">
+                        <p>
+                            Sistem otomatis akan menghidupkan pompa saat level air mencapai warning (≥6)
+                            dan mematikan saat kembali aman (≤3).
+                        </p>
+                        <div class="auto-pump-toggle-container">
+                            <div class="auto-pump-header">
+                                <div class="auto-pump-title-section">
+                                    <strong class="auto-pump-title">Auto-Pump System</strong>
+                                    <div class="auto-pump-status-text">
+                                        <span id="autoPumpStatus2">Status: Loading...</span>
+                                    </div>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="autoPumpToggle2" onchange="toggleAutoPump(2)">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
                         </div>
-                        <div class="auto-pump-levels">
-                            <span>ON Level: <strong id="activateLevel2">6</strong></span>
-                            <span>OFF Level: <strong id="deactivateLevel2">3</strong></span>
+                        <div class="auto-pump-details">
+                            <div class="auto-pump-levels-grid">
+                                <div class="level-item">
+                                    <span class="level-label">Activate Level:</span>
+                                    <strong class="level-value" id="activateLevel2">6</strong>
+                                </div>
+                                <div class="level-item">
+                                    <span class="level-label">Deactivate Level:</span>
+                                    <strong class="level-value" id="deactivateLevel2">3</strong>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="safety-notice">
+                            ⚠️ <strong>Safety:</strong> Jika auto-pump OFF dan level mencapai critical (≥8),
+                            sistem akan mengirim alarm notifikasi.
                         </div>
                     </div>
                 </div>
@@ -345,8 +154,10 @@
     
     <!-- Custom Scripts -->
     <script src="firebase-config.js"></script>
+    <script src="security.js"></script>
     <script src="auth-guard.js"></script>
     <script src="alarm-system.js"></script>
+    <script src="admin-check.js"></script>
     <script src="script.js"></script>
     
     <!-- Auto-Pump Control Script -->
@@ -367,9 +178,9 @@
                     // Update status text
                     const statusText = document.getElementById('autoPumpStatus2');
                     if (statusText) {
-                        statusText.innerHTML = config.enabled 
-                            ? '<span style="color: #28a745; font-weight: 600;">✓ Enabled</span>' 
-                            : '<span style="color: #dc3545; font-weight: 600;">✕ Disabled</span>';
+                        statusText.textContent = config.enabled ? '✓ Enabled' : '✕ Disabled';
+                        statusText.style.color = config.enabled ? '#28a745' : '#dc3545';
+                        statusText.style.fontWeight = '600';
                     }
                     
                     // Update levels

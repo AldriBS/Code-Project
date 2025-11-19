@@ -1,0 +1,237 @@
+{
+  "rules": {
+    // Default: Deny all access
+    ".read": false,
+    ".write": false,
+
+    // Area 1 - Ultra Secure with Rate Limiting
+    "area1": {
+      ".read": "auth != null",
+
+      "waterLevel": {
+        ".write": "auth != null && (auth.token.role == 'esp32' || auth.token.admin == true) && !root.child('securityBlocks/' + auth.uid).exists()",
+        ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 10 && (!data.exists() || (now - data.child('timestamp').val()) > 1000)"
+      },
+      "waterHeight": {
+        ".write": "auth != null && (auth.token.role == 'esp32' || auth.token.admin == true) && !root.child('securityBlocks/' + auth.uid).exists()",
+        ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 200"
+      },
+      "pumpStatus": {
+        ".write": "auth != null && (auth.token.role == 'esp32' || auth.token.admin == true) && !root.child('securityBlocks/' + auth.uid).exists()",
+        ".validate": "newData.isBoolean()"
+      },
+      "current": {
+        ".write": "auth != null && (auth.token.role == 'esp32' || auth.token.admin == true) && !root.child('securityBlocks/' + auth.uid).exists()",
+        ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 100"
+      },
+      "online": {
+        ".write": "auth != null && (auth.token.role == 'esp32' || auth.token.admin == true) && !root.child('securityBlocks/' + auth.uid).exists()",
+        ".validate": "newData.isBoolean()"
+      },
+      "timestamp": {
+        ".write": "auth != null && (auth.token.role == 'esp32' || auth.token.admin == true) && !root.child('securityBlocks/' + auth.uid).exists()",
+        ".validate": "newData.isString()"
+      },
+      "servoPosition": {
+        ".write": "auth != null && (auth.token.role == 'esp32' || auth.token.admin == true) && !root.child('securityBlocks/' + auth.uid).exists()",
+        ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 180"
+      },
+      "servoState": {
+        ".write": "auth != null && (auth.token.role == 'esp32' || auth.token.admin == true) && !root.child('securityBlocks/' + auth.uid).exists()",
+        ".validate": "newData.isString() && (newData.val() == 'open' || newData.val() == 'close' || newData.val() == 'auto')"
+      },
+      "firmwareVersion": {
+        ".write": "auth != null && (auth.token.role == 'esp32' || auth.token.admin == true) && !root.child('securityBlocks/' + auth.uid).exists()",
+        ".validate": "newData.isString() && newData.val().length < 20"
+      },
+      "dashboardOnline": {
+        ".write": "auth != null && !root.child('securityBlocks/' + auth.uid).exists()",
+        ".validate": "newData.isBoolean()"
+      },
+      "dashboardTimestamp": {
+        ".write": "auth != null && !root.child('securityBlocks/' + auth.uid).exists()",
+        ".validate": "newData.isString()"
+      },
+      "pumpCommand": {
+        ".write": "auth != null && !root.child('securityBlocks/' + auth.uid).exists()",
+        ".validate": "newData.isBoolean()"
+      },
+      "deviceHealth": {
+        ".read": "auth != null",
+        ".write": "auth != null && (auth.token.role == 'esp32' || auth.token.admin == true) && !root.child('securityBlocks/' + auth.uid).exists()",
+        ".validate": "newData.hasChildren(['rssi', 'freeHeap', 'uptime'])",
+        "rssi": {
+          ".validate": "newData.isNumber() && newData.val() >= -100 && newData.val() <= 0"
+        },
+        "freeHeap": {
+          ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 10000000"
+        },
+        "uptime": {
+          ".validate": "newData.isNumber() && newData.val() >= 0"
+        }
+      }
+    },
+
+    // Area 2 - Same ultra secure as Area 1
+    "area2": {
+      ".read": "auth != null",
+
+      "waterLevel": {
+        ".write": "auth != null && (auth.token.role == 'esp32' || auth.token.admin == true) && !root.child('securityBlocks/' + auth.uid).exists()",
+        ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 10"
+      },
+      "waterHeight": {
+        ".write": "auth != null && (auth.token.role == 'esp32' || auth.token.admin == true) && !root.child('securityBlocks/' + auth.uid).exists()",
+        ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 50"
+      },
+      "pumpStatus": {
+        ".write": "auth != null && (auth.token.role == 'esp32' || auth.token.admin == true) && !root.child('securityBlocks/' + auth.uid).exists()",
+        ".validate": "newData.isBoolean()"
+      },
+      "current": {
+        ".write": "auth != null && (auth.token.role == 'esp32' || auth.token.admin == true) && !root.child('securityBlocks/' + auth.uid).exists()",
+        ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 100"
+      },
+      "online": {
+        ".write": "auth != null && (auth.token.role == 'esp32' || auth.token.admin == true) && !root.child('securityBlocks/' + auth.uid).exists()",
+        ".validate": "newData.isBoolean()"
+      },
+      "timestamp": {
+        ".write": "auth != null && (auth.token.role == 'esp32' || auth.token.admin == true) && !root.child('securityBlocks/' + auth.uid).exists()",
+        ".validate": "newData.isString()"
+      },
+      "firmwareVersion": {
+        ".write": "auth != null && (auth.token.role == 'esp32' || auth.token.admin == true) && !root.child('securityBlocks/' + auth.uid).exists()",
+        ".validate": "newData.isString() && newData.val().length < 20"
+      },
+      "dashboardOnline": {
+        ".write": "auth != null && !root.child('securityBlocks/' + auth.uid).exists()",
+        ".validate": "newData.isBoolean()"
+      },
+      "dashboardTimestamp": {
+        ".write": "auth != null && !root.child('securityBlocks/' + auth.uid).exists()",
+        ".validate": "newData.isString()"
+      },
+      "pumpCommand": {
+        ".write": "auth != null && !root.child('securityBlocks/' + auth.uid).exists()",
+        ".validate": "newData.isBoolean()"
+      },
+      "deviceHealth": {
+        ".read": "auth != null",
+        ".write": "auth != null && (auth.token.role == 'esp32' || auth.token.admin == true) && !root.child('securityBlocks/' + auth.uid).exists()",
+        ".validate": "newData.hasChildren(['rssi', 'freeHeap', 'uptime'])",
+        "rssi": {
+          ".validate": "newData.isNumber() && newData.val() >= -100 && newData.val() <= 0"
+        },
+        "freeHeap": {
+          ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 10000000"
+        },
+        "uptime": {
+          ".validate": "newData.isNumber() && newData.val() >= 0"
+        }
+      }
+    },
+
+    // Config - ONLY ADMIN, not blocked
+    "config": {
+      ".read": "auth != null",
+
+      "autoPump": {
+        "area1": {
+          ".write": "auth != null && auth.token.admin == true && !root.child('securityBlocks/' + auth.uid).exists()",
+          ".validate": "newData.hasChildren(['enabled', 'activateLevel', 'deactivateLevel'])",
+          "enabled": {
+            ".validate": "newData.isBoolean()"
+          },
+          "activateLevel": {
+            ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 10 && newData.val() > root.child('config/autoPump/area1/deactivateLevel').val()"
+          },
+          "deactivateLevel": {
+            ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 10 && newData.val() < root.child('config/autoPump/area1/activateLevel').val()"
+          }
+        },
+        "area2": {
+          ".write": "auth != null && auth.token.admin == true && !root.child('securityBlocks/' + auth.uid).exists()",
+          ".validate": "newData.hasChildren(['enabled', 'activateLevel', 'deactivateLevel'])",
+          "enabled": {
+            ".validate": "newData.isBoolean()"
+          },
+          "activateLevel": {
+            ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 10 && newData.val() > root.child('config/autoPump/area2/deactivateLevel').val()"
+          },
+          "deactivateLevel": {
+            ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 10 && newData.val() < root.child('config/autoPump/area2/activateLevel').val()"
+          }
+        }
+      }
+    },
+
+    // Audit Logs - Authenticated read, ESP32/Admin write
+    "auditLogs": {
+      ".read": "auth != null && auth.token.admin == true",
+      ".write": "auth != null && !root.child('securityBlocks/' + auth.uid).exists()",
+      ".indexOn": ["timestamp", "user", "action"],
+      "$logId": {
+        ".validate": "newData.hasChildren(['timestamp', 'user', 'action'])",
+        "timestamp": {
+          ".validate": "newData.isString()"
+        },
+        "user": {
+          ".validate": "newData.isString()"
+        },
+        "action": {
+          ".validate": "newData.isString()"
+        }
+      }
+    },
+
+    // Security Violations - Only system can write
+    "securityViolations": {
+      ".read": "auth != null && auth.token.admin == true",
+      ".write": "auth != null && !root.child('securityBlocks/' + auth.uid).exists()",
+      ".indexOn": ["timestamp", "user", "action"]
+    },
+
+    // Security Blocks - Admin only
+    "securityBlocks": {
+      ".read": "auth != null && auth.token.admin == true",
+      ".write": "auth != null && auth.token.admin == true",
+      "$uid": {
+        ".validate": "newData.hasChildren(['timestamp', 'reason'])"
+      }
+    },
+
+    // Alarm logs - Authenticated read, ESP32/Admin write
+    "alarms": {
+      ".read": "auth != null",
+      ".write": "auth != null && (auth.token.role == 'esp32' || auth.token.admin == true) && !root.child('securityBlocks/' + auth.uid).exists()",
+      ".indexOn": ["timestamp", "area", "level"]
+    },
+
+    // User presence tracking
+    "presence": {
+      ".read": "auth != null",
+      "$uid": {
+        ".write": "auth != null && auth.uid == $uid && !root.child('securityBlocks/' + auth.uid).exists()"
+      }
+    },
+
+    // User roles - Only admin
+    "userRoles": {
+      ".read": "auth != null && auth.token.admin == true",
+      ".write": "auth != null && auth.token.admin == true && !root.child('securityBlocks/' + auth.uid).exists()",
+      "$uid": {
+        ".validate": "newData.hasChildren(['email', 'role', 'createdAt'])",
+        "email": {
+          ".validate": "newData.isString() && newData.val().length < 100"
+        },
+        "role": {
+          ".validate": "newData.isString() && (newData.val() == 'admin' || newData.val() == 'user' || newData.val() == 'esp32')"
+        },
+        "createdAt": {
+          ".validate": "newData.isString()"
+        }
+      }
+    }
+  }
+}
